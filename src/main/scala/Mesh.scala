@@ -9,15 +9,22 @@ class Mesh (val tuple : Tuple2[String,String]){
   val corners = Tuple4(vertices.reduceLeft(min_x),
     vertices.reduceLeft(max_y),vertices.reduceLeft(max_x),vertices.reduceLeft(min_y))
 
+  var total_faces = 0
+
   def getAreaOfFacesInPolygon(polygon : Polygon) : Double = {
     var area = 0.0
-    for(face <- faces if polygon.contains(face.centroid)) area += face.area
+    for(face <- faces if polygon.contains(face.centroid)) {
+      area += face.area
+      face.used =true
+      face.polys.append(polygon)
+      total_faces += 1
+    }
     area
   }
 
   private def constructVerticesList() : ArrayBuffer[Vertex] = {
     val verticesArray = tuple._2.split(" ").array
-    val verticesBuffer = new ArrayBuffer[Vertex]()
+    val verticesBuffer = new ArrayBuffer[Vertex]
     for (i <- verticesArray.indices.by(3)) {
       val vertex = new Vertex(verticesArray(i).toDouble,
         verticesArray(i+2).toDouble,
