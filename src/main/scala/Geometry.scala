@@ -45,10 +45,10 @@ class Geometry {
 
   private def createRectangle(quadrilateral: Polygon): Polygon = {
 
-    val leftEdge = new Edge(quadrilateral.leftTop, quadrilateral.rightTop)
-    val rightEdge = new Edge(quadrilateral.leftBottom, quadrilateral.rightBottom)
-    val alignedCorner = new Vertex(quadrilateral.leftTop.x + math.abs(rightEdge.x_disp), quadrilateral.leftTop.y + math.abs(rightEdge.y_disp), quadrilateral.leftTop.z)
-    new Polygon(quadrilateral.leftTop, alignedCorner, quadrilateral.rightBottom, quadrilateral.leftBottom)
+    val leftEdge = new Edge(quadrilateral.a, quadrilateral.b)
+    val rightEdge = new Edge(quadrilateral.d, quadrilateral.c)
+    val alignedCorner = new Vertex(quadrilateral.a.x + math.abs(rightEdge.x_disp), quadrilateral.a.y + math.abs(rightEdge.y_disp), quadrilateral.a.z)
+    new Polygon(quadrilateral.a, alignedCorner, quadrilateral.c, quadrilateral.d)
 
   }
 

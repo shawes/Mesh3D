@@ -1,8 +1,5 @@
 object Driver extends App {
 
-  val widthRatio = 2
-  val lengthRatio = 6
-
   val reader = new MeshReader()
   val pass1 = reader.read("files/shelly_pass1.x3d")
   val pass2 = reader.read("files/shelly_pass2.x3d")
@@ -16,42 +13,24 @@ object Driver extends App {
 
   val rectangle = geometry.findMaximumBoundingBox(List(mesh1, mesh2, mesh3))
 
-  println("Width distance: " + rectangle.leftTop.distanceXY(rectangle.rightTop) + " and " + rectangle.leftBottom.distanceXY(rectangle.rightBottom))
-  println("Length distance: " + rectangle.leftTop.distanceXY(rectangle.leftBottom) + " and " + rectangle.rightTop.distanceXY(rectangle.rightBottom))
+  println("Width distance: " + rectangle.a.distanceXY(rectangle.b) + " and " + rectangle.d.distanceXY(rectangle.c))
+  println("Length distance: " + rectangle.a.distanceXY(rectangle.d) + " and " + rectangle.b.distanceXY(rectangle.c))
 
-  val rectangleSubDivider = new RectangleSubDivider()
-  rectangleSubDivider.setRatios(6, 18)
+  val rectangleSubDivider = new RectangleSubDivider(widthRatio = 6, lengthRatio = 18)
   val polygons = rectangleSubDivider.divideRectangle(rectangle)
 
   println("There are this many polygons "+ polygons.size)
 
-  println("--Mesh 1 area--")
-  var sum = 0.0
-  for(polygon <- polygons) {
-    val area = mesh1.getAreaOfFacesInPolygon(polygon)
-    sum += area
-    println(area)
-  }
-  println("Mesh 1 added = "+sum+ " faces = "+ mesh1.total_faces)
-
-  println("--Mesh 2 area--")
-  sum = 0.0
-  for(polygon <- polygons) {
-    val area = mesh2.getAreaOfFacesInPolygon(polygon)
-    sum+= area
-    println(area)
-  }
-  println("Mesh 2 added = "+sum + " faces = "+ mesh2.total_faces)
-
-  println("--Mesh 3 area--")
-  sum = 0.0
-  for(polygon <- polygons) {
-    val area = mesh3.getAreaOfFacesInPolygon(polygon)
-    sum+= area
-    println(area)
-  }
-  println("Mesh 3 added = "+sum+ " faces = "+ mesh3.total_faces)
-
-
-
+  println("--Mesh 1 started--")
+  println("Area = " + mesh1.getArea(polygons))
+  println("--Mesh 1 finished--")
+  println()
+  println("--Mesh 2 started--")
+  println("Area = " + mesh2.getArea(polygons))
+  println("--Mesh 2 finished--")
+  println()
+  println("--Mesh 3 started--")
+  println("Area = " + mesh3.getArea(polygons))
+  println("--Mesh 3 finished--")
+  println()
 }
