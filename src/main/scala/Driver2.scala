@@ -1,5 +1,4 @@
 import scala.collection.mutable.ArrayBuffer
-import scala.xml.XML
 
 object Driver2 extends App {
 
@@ -13,29 +12,9 @@ object Driver2 extends App {
   val mesh1 = new Mesh(pass1)
   val mesh2 = new Mesh(pass2)
   val mesh3 = new Mesh(pass3)
-  
-  println("Pass1 corners " + mesh1.corners)
-  println("Pass2 corners " + mesh2.corners)
-  println("Pass3 corners " + mesh3.corners)
 
-  val maxBoundingBox = geometry.findMaximumBoundingBox(mesh1,mesh2,mesh3)
-  println("Bounding box corners " + maxBoundingBox)
+  val rectangle = geometry.findMaximumBoundingBox(List(mesh1, mesh2, mesh3))
 
-  val leftEdge = new Edge(maxBoundingBox.leftTop, maxBoundingBox.rightTop)
-  val rightEdge = new Edge(maxBoundingBox.leftBottom, maxBoundingBox.rightBottom)
-  println("Slope left = " + leftEdge.slope + " slope right= " + rightEdge.slope)
-
-  val alignedCorner = new Vertex(maxBoundingBox.leftTop.x + math.abs(rightEdge.x_disp), maxBoundingBox.leftTop.y + math.abs(rightEdge.y_disp), maxBoundingBox.leftTop.z)
-
-  val rectangle = new Polygon(maxBoundingBox.leftTop, alignedCorner, maxBoundingBox.rightBottom, maxBoundingBox.leftBottom)
-  println("Rectangle corners " + rectangle)
-
-  val leftEdgeRec = new Edge(maxBoundingBox.leftTop, maxBoundingBox.rightTop)
-  val rightEdgeRec = new Edge(maxBoundingBox.leftBottom, maxBoundingBox.rightBottom)
-  val topEdgeRec = new Edge(maxBoundingBox.leftTop, maxBoundingBox.leftBottom)
-  val bottomEdgeRec = new Edge(maxBoundingBox.rightTop, maxBoundingBox.rightBottom)
-  println("Slope left = " + leftEdge.slope + " slope right= " + rightEdge.slope)
-  println("Slope top = " + topEdgeRec.slope + " slope bottom= " + bottomEdgeRec.slope)
 
   val polygon1 = new Polygon(mesh1.corners._1, mesh1.corners._2, mesh1.corners._3, mesh1.corners._4)
   val polygon2 = new Polygon(mesh2.corners._1, mesh2.corners._2, mesh2.corners._3, mesh2.corners._4)
@@ -47,15 +26,10 @@ object Driver2 extends App {
 
   println("X-axis distances: " + rectangle.leftTop.distanceXY(rectangle.rightTop) + " and " + rectangle.leftBottom.distanceXY(rectangle.rightBottom))
   println("X-axis distances: " + rectangle.leftTop.distanceXY(rectangle.leftBottom) + " and " + rectangle.rightTop.distanceXY(rectangle.rightBottom))
-
-  def calculateRatioPoint(start:Vertex, end:Vertex,a:Int,b:Int) : Vertex = {
-    new Vertex((a*start.x + b*end.x)/(a+b),(a*start.y + b*end.y)/(a+b),0)
-  }
-
   val widthRatio = 2
   val lengthRatio = 6
-
   val verticesMatrix = Array.ofDim[Vertex](widthRatio + 1, lengthRatio + 1)
+  val polygons: ArrayBuffer[Polygon] = new ArrayBuffer[Polygon]()
 
   //put in the corners
 
@@ -100,8 +74,7 @@ object Driver2 extends App {
       //println(vertex)
     }
   }
-
-  val polygons: ArrayBuffer[Polygon] = new ArrayBuffer[Polygon]()
+  val multiples = mesh1.faces.filter(x => x.polys.size > 1)
   println("Calculating squares")
   for (i <- 0 to widthRatio) {
     for (j <- 0 to lengthRatio) {
@@ -150,12 +123,13 @@ object Driver2 extends App {
   }
   println("Mesh 3 added = "+sum+ " faces = "+ mesh3.total_faces)
 
+  def calculateRatioPoint(start: Vertex, end: Vertex, a: Int, b: Int): Vertex = {
+    new Vertex((a * start.x + b * end.x) / (a + b), (a * start.y + b * end.y) / (a + b), 0)
+  }
 
-  val multiples = mesh1.faces.filter(x=>x.polys.size >1)
-
-  if(multiples.size > 0) {
+  if (multiples.nonEmpty) {
     val facemulti = multiples.head
-    println("With centroid : " + facemulti.centroid + " it was found in " + facemulti.polys(0) + " and " + facemulti.polys(1))
+    println("With centroid : " + facemulti.centroid + " it was found in " + facemulti.polys.head + " and " + facemulti.polys(1))
   }
 
 

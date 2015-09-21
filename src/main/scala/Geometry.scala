@@ -15,51 +15,41 @@ class Geometry {
     math.tan((edge1.slope-edge2.slope)/(1-edge1.slope*edge2.slope))
   }
 
-  def findMaximumBoundingBox(mesh1: Mesh, mesh2: Mesh, mesh3:Mesh): Polygon = {
+  def findMaximumBoundingBox(meshList: List[Mesh]): Polygon = {
 
-    //find max min x
-    val leftTop = new Vertex(List(mesh1.corners._1.x, mesh2.corners._1.x, mesh3.corners._1.x).max,
-      List(mesh1.corners._1.y, mesh2.corners._1.y, mesh3.corners._1.y).max,
-      List(mesh1.corners._1.z, mesh2.corners._1.z, mesh3.corners._1.z).max)
+    val maxQuadrilateral = findMaximumBoundingQuad(meshList)
+    createRectangle(maxQuadrilateral)
+  }
 
-    val rightTop = new Vertex(List(mesh1.corners._2.x, mesh2.corners._2.x, mesh3.corners._2.x).max,
-      List(mesh1.corners._2.y, mesh2.corners._2.y, mesh3.corners._2.y).max,
-      List(mesh1.corners._2.z, mesh2.corners._2.z, mesh3.corners._2.z).max)
+  private def findMaximumBoundingQuad(meshList: List[Mesh]): Polygon = {
 
-    val rightBottom = new Vertex(List(mesh1.corners._3.x, mesh2.corners._3.x, mesh3.corners._3.x).min,
-      List(mesh1.corners._3.y, mesh2.corners._3.y, mesh3.corners._3.y).min,
-      List(mesh1.corners._3.z, mesh2.corners._3.z, mesh3.corners._3.z).min)
+    val cornerLeftBottom = new Vertex(meshList.map(f => f.corners._1.x).max,
+      meshList.map(f => f.corners._1.y).max,
+      meshList.map(f => f.corners._1.z).max)
 
-    val leftBottom = new Vertex(List(mesh1.corners._4.x, mesh2.corners._4.x, mesh3.corners._4.x).min,
-      List(mesh1.corners._4.y, mesh2.corners._4.y, mesh3.corners._4.y).min,
-      List(mesh1.corners._4.z, mesh2.corners._4.z, mesh3.corners._4.z).min)
+    val cornerLeftTop = new Vertex(meshList.map(f => f.corners._2.x).max,
+      meshList.map(f => f.corners._2.y).max,
+      meshList.map(f => f.corners._2.z).max)
 
+    val cornerRightTop = new Vertex(meshList.map(f => f.corners._3.x).min,
+      meshList.map(f => f.corners._3.y).min,
+      meshList.map(f => f.corners._3.z).min)
 
-    new Polygon(leftTop, rightTop, rightBottom, leftBottom)
+    val cornerRightBottom = new Vertex(meshList.map(f => f.corners._4.x).min,
+      meshList.map(f => f.corners._4.y).min,
+      meshList.map(f => f.corners._4.z).min)
+
+    new Polygon(cornerLeftBottom, cornerLeftTop, cornerRightTop, cornerRightBottom)
 
   }
-//  def findMaximumBoundingBox2(meshList : List[Mesh]): Polygon = {
-//
-//
-//    //find max min x
-//    val leftTop = new Vertex(meshList.map(f=> f.corners._1.x.max,
-//      List(mesh1.corners._1.y, mesh2.corners._1.y, mesh3.corners._1.y).max,
-//      List(mesh1.corners._1.z, mesh2.corners._1.z, mesh3.corners._1.z).max)
-//
-//    val rightTop = new Vertex(List(mesh1.corners._2.x, mesh2.corners._2.x, mesh3.corners._2.x).max,
-//      List(mesh1.corners._2.y, mesh2.corners._2.y, mesh3.corners._2.y).max,
-//      List(mesh1.corners._2.z, mesh2.corners._2.z, mesh3.corners._2.z).max)
-//
-//    val rightBottom = new Vertex(List(mesh1.corners._3.x, mesh2.corners._3.x, mesh3.corners._3.x).min,
-//      List(mesh1.corners._3.y, mesh2.corners._3.y, mesh3.corners._3.y).min,
-//      List(mesh1.corners._3.z, mesh2.corners._3.z, mesh3.corners._3.z).min)
-//
-//    val leftBottom = new Vertex(List(mesh1.corners._4.x, mesh2.corners._4.x, mesh3.corners._4.x).min,
-//      List(mesh1.corners._4.y, mesh2.corners._4.y, mesh3.corners._4.y).min,
-//      List(mesh1.corners._4.z, mesh2.corners._4.z, mesh3.corners._4.z).min)
-//
-//
-//    new Polygon(leftTop, rightTop, rightBottom, leftBottom)
-//
-//  }
+
+  private def createRectangle(quadrilateral: Polygon): Polygon = {
+
+    val leftEdge = new Edge(quadrilateral.leftTop, quadrilateral.rightTop)
+    val rightEdge = new Edge(quadrilateral.leftBottom, quadrilateral.rightBottom)
+    val alignedCorner = new Vertex(quadrilateral.leftTop.x + math.abs(rightEdge.x_disp), quadrilateral.leftTop.y + math.abs(rightEdge.y_disp), quadrilateral.leftTop.z)
+    new Polygon(quadrilateral.leftTop, alignedCorner, quadrilateral.rightBottom, quadrilateral.leftBottom)
+
+  }
+
 }
