@@ -1,30 +1,24 @@
 import scala.collection.mutable.ArrayBuffer
 
-class Mesh (val tuple : (String,String), threeDimension : Boolean){
+class Mesh(val tuple: (String, String), is3DArea: Boolean) {
 
   val vertices = constructVerticesList()
   val faces = constructFacesList()
   val corners = Tuple4(vertices.reduceLeft(min_x),
     vertices.reduceLeft(max_y),vertices.reduceLeft(max_x),vertices.reduceLeft(min_y))
 
-  def getAreas(polygons: List[Polygon]): List[Double] = {
-    polygons.map(x => getAreaOfFacesInPolygon(x))
+  def getTotalArea(polygons: List[Polygon]): Double = {
+    getAreas(polygons).sum
   }
 
-  def getTotalArea(polygons: List[Polygon]): Double = {
-//    var sum = 0.0
-//    for (polygon <- polygons) {
-//      val area = getAreaOfFacesInPolygon(polygon)
-//      sum += area
-//    }
-//    sum
-    getAreas(polygons).sum
+  def getAreas(polygons: List[Polygon]): List[Double] = {
+    polygons.map(x => getAreaOfFacesInPolygon(x))
   }
 
   def getAreaOfFacesInPolygon(polygon : Polygon) : Double = {
     var area = 0.0
     for(face <- faces if polygon.contains(face.centroid)) {
-     if(threeDimension) area += face.area else area += face.area2D
+      if (is3DArea) area += face.area else area += face.area2D
     }
     area
   }
