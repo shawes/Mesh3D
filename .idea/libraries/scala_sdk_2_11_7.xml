@@ -1,0 +1,47 @@
+<component name="libraryTable">
+  <library name="scala-sdk-2.11.7" type="Scala">
+    <properties>
+      <compiler-classpath>
+        <root url="file:///usr/local/Cellar/scala/2.11.7/idea/lib/scala-compiler.jar" />
+        <root url="file:///usr/local/Cellar/scala/2.11.7/idea/lib/scala-library.jar" />
+        <root url="file:///usr/local/Cellar/scala/2.11.7/idea/lib/scala-reflect.jar" />
+        <root url="file:///usr/local/Cellar/scala/2.11.7/libexec/lib/scala-compiler.jar" />
+        <root url="file:///usr/local/Cellar/scala/2.11.7/libexec/lib/scala-library.jar" />
+        <root url="file:///usr/local/Cellar/scala/2.11.7/libexec/lib/scala-reflect.jar" />
+      </compiler-classpath>
+    </properties>
+    <CLASSES>
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/idea/lib/scala-actors-2.11.0.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/idea/lib/scala-actors-migration_2.11-1.1.0.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/idea/lib/scala-library.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/idea/lib/scala-parser-combinators_2.11-1.0.4.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/idea/lib/scala-reflect.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/idea/lib/scala-swing_2.11-1.0.2.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/idea/lib/scala-xml_2.11-1.0.4.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/libexec/lib/scala-actors-2.11.0.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/libexec/lib/scala-actors-migration_2.11-1.1.0.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/libexec/lib/scala-library.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/libexec/lib/scala-parser-combinators_2.11-1.0.4.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/libexec/lib/scala-reflect.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/libexec/lib/scala-swing_2.11-1.0.2.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/libexec/lib/scala-xml_2.11-1.0.4.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/idea/doc/api/jars/scala-actors-2.11.0-javadoc.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/idea/doc/api/jars/scala-actors-migration_2.11-1.1.0-javadoc.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/idea/doc/api/jars/scala-library-2.11.7-javadoc.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/idea/doc/api/jars/scala-parser-combinators_2.11-1.0.4-javadoc.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/idea/doc/api/jars/scala-reflect-2.11.7-javadoc.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/idea/doc/api/jars/scala-swing_2.11-1.0.2-javadoc.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/idea/doc/api/jars/scala-xml_2.11-1.0.4-javadoc.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/share/doc/scala/api/jars/scala-actors-2.11.0-javadoc.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/share/doc/scala/api/jars/scala-actors-migration_2.11-1.1.0-javadoc.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/share/doc/scala/api/jars/scala-library-2.11.7-javadoc.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/share/doc/scala/api/jars/scala-parser-combinators_2.11-1.0.4-javadoc.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/share/doc/scala/api/jars/scala-reflect-2.11.7-javadoc.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/share/doc/scala/api/jars/scala-swing_2.11-1.0.2-javadoc.jar!/" />
+      <root url="jar:///usr/local/Cellar/scala/2.11.7/share/doc/scala/api/jars/scala-xml_2.11-1.0.4-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>

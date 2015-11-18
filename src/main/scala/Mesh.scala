@@ -1,30 +1,31 @@
 import scala.collection.mutable.ArrayBuffer
 
-class Mesh (val tuple : Tuple2[String,String]){
+class Mesh(val tuple: (String, String), is3DArea: Boolean) {
 
   val vertices = constructVerticesList()
   val faces = constructFacesList()
   val corners = Tuple4(vertices.reduceLeft(min_x),
     vertices.reduceLeft(max_y),vertices.reduceLeft(max_x),vertices.reduceLeft(min_y))
 
-  def getArea(polygons: List[Polygon]): Double = {
-    var sum = 0.0
-    for (polygon <- polygons) {
-      val area = getAreaOfFacesInPolygon(polygon)
-      sum += area
-      println(area)
-    }
-    sum
+  def getTotalArea(polygons: List[Polygon]): Double = {
+    getAreas(polygons).sum
+  }
+
+  def getAreas(polygons: List[Polygon]): List[Double] = {
+    polygons.map(x => getAreaOfFacesInPolygon(x))
   }
 
   def getAreaOfFacesInPolygon(polygon : Polygon) : Double = {
     var area = 0.0
     for(face <- faces if polygon.contains(face.centroid)) {
-      area += face.area
+      if (is3DArea) area += face.area else area += face.area2D
     }
     area
   }
 
+  /*
+  Note the y and z vertices are reversed due to the axis of the mesh
+   */
   private def constructVerticesList() : ArrayBuffer[Vertex] = {
     val verticesArray = tuple._2.split(" ").array
     val verticesBuffer = new ArrayBuffer[Vertex]
@@ -38,10 +39,10 @@ class Mesh (val tuple : Tuple2[String,String]){
   }
 
   private def constructFacesList() : ArrayBuffer[Face] = {
-    val facesArray = tuple._1.split("-1").array
+    val facesArray: Array[String] = tuple._1.split("-1")
     val facesBuffer = new ArrayBuffer[Face]()
     for(i <- facesArray.indices) {
-      val str = facesArray(i).trim
+      val str:String = facesArray(i).trim
       val verticies = str.split(" ")
       val face = new Face(vertices(verticies(0).toInt), vertices(verticies(1).toInt), vertices(verticies(2).toInt))
       facesBuffer.append(face)

@@ -11,7 +11,7 @@ class Polygon(val a: Vertex, val b: Vertex, val c: Vertex, val d: Vertex) {
     rayCasting(vertex)
   }
 
-  override def toString = points.toString()
+  override def toString = points.toString
 
   private def rayCasting(p: Vertex) = edges.count(raySegI(p, _)) % 2 != 0
 

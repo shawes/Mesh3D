@@ -25,5 +25,5 @@ class Face(val v1: Vertex, val v2: Vertex, val v3: Vertex) {
     math.sqrt(semiperimeter*(semiperimeter-edge1)*(semiperimeter-edge2)*(semiperimeter-edge3))
   }
 
-  override def toString = "centroid is "+ centroid
+  override def toString = "centroid is " + centroid
 }
