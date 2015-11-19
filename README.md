@@ -23,10 +23,10 @@ input       Input .x3d files to read. If not specified, use stdin. (May be
             specified multiple times.)
 ```
 
-The general gist of the algorithm are:
-1. Read in a list of X3D files that specify retangular meshes.
-2. Find the maximum bounding retangule that fits inside all the meshes
-3. Subdivide the each mesh into the specified number of quadrats using coordinate geometry
-4. Calculate the area face where the centroid fits into of each quadrat, using the dimensions specified
-5. Print the output to a .csv file
+The general gist of the algorithm are:  
+1. Read in a list of X3D files that specify retangular meshes.    
+2. Find the maximum bounding retangule that fits inside all the meshes.  
+3. Subdivide the each mesh into the specified number of quadrats using coordinate geometry.  
+4. Calculate the area face where the centroid fits into of each quadrat, using the dimensions specified.  
+5. Print the output to a .csv file.  
 
