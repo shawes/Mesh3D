@@ -9,7 +9,7 @@ Usage: mesh3d [OPTIONS] outputfile [input] ...
 
 OPTIONS
 
---dim n     Calculate the 3D (3) or 2D (2) area of the faces
+--dim n     Calculate the 3D (3) or 2D (2) area of the faces.
 
 --length n  The number to subdivide the rectangular mesh's length.
 
