@@ -30,9 +30,9 @@ class Mesh(val tuple: (String, String), is3DArea: Boolean) {
     val verticesArray = tuple._2.split(" ").array
     val verticesBuffer = new ArrayBuffer[Vertex]
     for (i <- verticesArray.indices.by(3)) {
-      val vertex = new Vertex(verticesArray(i).toDouble,
+      val vertex = new Vertex(verticesArray(i + 1).toDouble,
         verticesArray(i+2).toDouble,
-        verticesArray(i+1).toDouble)
+        verticesArray(i).toDouble)
       verticesBuffer.append(vertex)
     }
     verticesBuffer

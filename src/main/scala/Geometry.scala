@@ -26,11 +26,11 @@ class Geometry {
 
     val cornerLeftBottom = new Vertex(meshList.map(f => f.corners._1.x).max,
       meshList.map(f => f.corners._1.y).max,
-      meshList.map(f => f.corners._1.z).max)
+      meshList.map(f => f.corners._1.z).min)
 
     val cornerLeftTop = new Vertex(meshList.map(f => f.corners._2.x).max,
       meshList.map(f => f.corners._2.y).max,
-      meshList.map(f => f.corners._2.z).max)
+      meshList.map(f => f.corners._2.z).min)
 
     val cornerRightTop = new Vertex(meshList.map(f => f.corners._3.x).min,
       meshList.map(f => f.corners._3.y).min,
@@ -39,6 +39,12 @@ class Geometry {
     val cornerRightBottom = new Vertex(meshList.map(f => f.corners._4.x).min,
       meshList.map(f => f.corners._4.y).min,
       meshList.map(f => f.corners._4.z).min)
+
+    println("Bounding box is:")
+    println("Bottom left corner " + cornerLeftBottom)
+    println("Top left corner " + cornerLeftTop)
+    println("Top right corner " + cornerRightTop)
+    println("Bottom right corner " + cornerRightBottom)
 
     new Polygon(cornerLeftBottom, cornerLeftTop, cornerRightTop, cornerRightBottom)
 
