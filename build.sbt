@@ -1,4 +1,4 @@
-name := "Mesh3D"
+name := "mesh3d.quadrats"
 
 version := "1.0"
 
@@ -7,4 +7,4 @@ libraryDependencies += "org.scala-lang.modules" % "scala-xml_2.11" % "1.0.5"
 libraryDependencies += "org.clapper" %% "argot" % "1.0.3"
 libraryDependencies += "com.github.tototoshi" %% "scala-csv" % "1.2.2"
 
-assemblyJarName in assembly := "mesh3d.jar"
+assemblyJarName in assembly := "mesh_quadrats.jar"

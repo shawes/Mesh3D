@@ -40,12 +40,6 @@ class Geometry {
       meshList.map(f => f.corners._4.y).min,
       meshList.map(f => f.corners._4.z).min)
 
-    println("Bounding box is:")
-    println("Bottom left corner " + cornerLeftBottom)
-    println("Top left corner " + cornerLeftTop)
-    println("Top right corner " + cornerRightTop)
-    println("Bottom right corner " + cornerRightBottom)
-
     new Polygon(cornerLeftBottom, cornerLeftTop, cornerRightTop, cornerRightBottom)
 
   }

@@ -1,6 +1,11 @@
 import scala.collection.mutable.ArrayBuffer
 
-class Mesh(val tuple: (String, String), is3DArea: Boolean) {
+class Mesh(val tuple: (String, String)) {
+
+  // These values will need to change depending on the orientation of the axis in mesh
+  val X = 1
+  val Y = 2
+  val Z = 0
 
   val vertices = constructVerticesList()
   val faces = constructFacesList()
@@ -12,10 +17,10 @@ class Mesh(val tuple: (String, String), is3DArea: Boolean) {
   }
 
   def getAreas(polygons: List[Polygon]): List[Double] = {
-    polygons.map(x => getAreaOfFacesInPolygon(x))
+    polygons.map(x => getAreaOfFacesInPolygon(x, is3DArea = true))
   }
 
-  def getAreaOfFacesInPolygon(polygon : Polygon) : Double = {
+  private def getAreaOfFacesInPolygon(polygon: Polygon, is3DArea: Boolean): Double = {
     var area = 0.0
     for(face <- faces if polygon.contains(face.centroid)) {
       if (is3DArea) area += face.area else area += face.area2D
@@ -23,16 +28,21 @@ class Mesh(val tuple: (String, String), is3DArea: Boolean) {
     area
   }
 
+  def get2DAreas(polygons: List[Polygon]): List[Double] = {
+    polygons.map(x => getAreaOfFacesInPolygon(x, is3DArea = false))
+  }
+
   /*
-  Note the y and z vertices are reversed due to the axis of the mesh
+  Uses the constants X,Y,Z to determine the width and the length of the mesh as orientated
+  in the mesh. It assumes the width is X, the length is Y and Z is the height.
    */
   private def constructVerticesList() : ArrayBuffer[Vertex] = {
     val verticesArray = tuple._2.split(" ").array
     val verticesBuffer = new ArrayBuffer[Vertex]
     for (i <- verticesArray.indices.by(3)) {
-      val vertex = new Vertex(verticesArray(i + 1).toDouble,
-        verticesArray(i+2).toDouble,
-        verticesArray(i).toDouble)
+      val vertex = new Vertex(verticesArray(i + X).toDouble,
+        verticesArray(i + Y).toDouble,
+        verticesArray(i + Z).toDouble)
       verticesBuffer.append(vertex)
     }
     verticesBuffer
