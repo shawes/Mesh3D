@@ -1,6 +1,6 @@
 import scala.collection.mutable.ArrayBuffer
 
-class Mesh(val tuple: (String, String)) {
+class Mesh(val tuple: (String, String), val order: DimensionOrder) {
 
   // These values will need to change depending on the orientation of the axis in mesh
   val X = 1
@@ -40,9 +40,9 @@ class Mesh(val tuple: (String, String)) {
     val verticesArray = tuple._2.split(" ").array
     val verticesBuffer = new ArrayBuffer[Vertex]
     for (i <- verticesArray.indices.by(3)) {
-      val vertex = new Vertex(verticesArray(i + X).toDouble,
-        verticesArray(i + Y).toDouble,
-        verticesArray(i + Z).toDouble)
+      val vertex = new Vertex(verticesArray(i + order.getFirst).toDouble,
+        verticesArray(i + order.getSecond).toDouble,
+        verticesArray(i + order.getThird).toDouble)
       verticesBuffer.append(vertex)
     }
     verticesBuffer

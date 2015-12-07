@@ -13,6 +13,7 @@ object Driver {
   val parser = new ArgotParser("mesh_quadrats", preUsage = Some("Mesh Quadrats, Author: Steven Hawes, Version 1.0"))
   val width = parser.option[Int](List("width"), "n", "The number to subdivide the rectangular mesh's width.")
   val length = parser.option[Int](List("length"), "n", "The number to subdivide the rectangular mesh's length.")
+  val dimensions = parser.option[String](List("dimensions"), "XYZ", "The dimensions of the input files")
   val output = parser.parameter[String]("outputfile", "Output file to which to write (a .csv)", optional = false)
   val input = parser.multiParameter[File]("input", "Input .x3d files to read. If not specified, use stdin.", optional = true) {
     (s, opt) =>
@@ -41,7 +42,7 @@ object Driver {
     val files = input.value.toList
     val passes = files.map(x => reader.read(x))
 
-    val meshes = passes.map(x => new Mesh(x))
+    val meshes = passes.map(x => new Mesh(x, new DimensionOrder(dimensions.value.getOrElse("XYZ"))))
 
     val rectangle = geometry.findMaximumBoundingBox(meshes)
 

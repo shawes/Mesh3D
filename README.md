@@ -13,6 +13,9 @@ OPTIONS
 
 --width n   The number to subdivide the rectangular mesh's width.
 
+--dim XYZ   The order of the axis (it assumes XYZ)
+
+
 PARAMETERS
 
 outputfile  Output file to which to write (a .csv)
