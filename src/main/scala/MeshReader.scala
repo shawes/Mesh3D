@@ -1,9 +1,10 @@
-import scala.xml.XML
 import java.io.File
+
+import scala.xml.XML
 
 class MeshReader() {
 
-  def read(file: File) : (String,String) = {
+  def readx3d(file: File): (String, String) = {
     val xml = XML.loadFile(file)
 
     val faces = (xml \\ "X3D" \ "Scene" \ "Shape" \ "IndexedFaceSet" \ "@coordIndex").text
@@ -11,4 +12,6 @@ class MeshReader() {
 
     new Tuple2(faces,vertices)
   }
+
+
 }

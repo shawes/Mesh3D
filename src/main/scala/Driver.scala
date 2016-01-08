@@ -40,12 +40,9 @@ object Driver {
     }
     parser.parse(args, ScoptParser()) match {
       case Some(config) =>
-
         width = config.width
         length = config.length
-
         runMesh3D(config)
-
       case None =>
       // arguments are bad, error message will have been displayed
     }
@@ -58,13 +55,14 @@ object Driver {
     val reader = new MeshReader()
     val geometry = new Geometry()
     val files = config.files.toList
-    val passes = files.map(x => reader.read(x))
+    val passes = files.map(x => reader.readx3d(x))
     val meshes = passes.map(x => new Mesh(x, new DimensionOrder(config.dimensions)))
     val rectangle = geometry.findMaximumBoundingBox(meshes)
 
+    // If the info flag is set, just print the bounding box to the command line
     if (config.info) {
       println(rectangle.toString)
-      System.exit(0)
+      System.exit(0) // There has to be a better way to do this
     }
 
     val widthValue = rectangle.a.distanceXY(rectangle.b)
@@ -84,7 +82,10 @@ object Driver {
     writeCsvFile(files, (widthValue, lengthValue), csv3dOutput, csv2dOutput, config.out)
   }
 
-  def writeCsvFile(files: List[File], values: (Double, Double), csv3dOutput: List[AbstractSeq[Any] with io.Serializable], csv2dOutput: List[AbstractSeq[Any] with io.Serializable], file: File): Unit = {
+  def writeCsvFile(files: List[File], values: (Double, Double),
+                   csv3dOutput: List[AbstractSeq[Any] with io.Serializable],
+                   csv2dOutput: List[AbstractSeq[Any] with io.Serializable],
+                   file: File): Unit = {
     val names = files.map(x => x.getName)
     //val f = new File()
     val writer = CSVWriter.open(file)
