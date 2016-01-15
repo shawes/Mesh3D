@@ -12,11 +12,11 @@ object Driver {
 
   def main(args: Array[String]) {
 
-    val parser = new scopt.OptionParser[ScoptParser]("scopt") {
-      head("scopt", "3.x")
+    val parser = new scopt.OptionParser[ScoptParser]("mesh3d") {
+      head("mesh3d", "1.0")
       opt[Unit]('i', "info") action { (_, c) =>
         c.copy(info = true)
-      } text "info is a flag"
+      } text "info provides the size of the bounding box, use to ensure axis are correct"
       opt[Int]('w', "width") action { (x, c) =>
         c.copy(width = x)
       } text "The number to subdivide the rectangular mesh's width"
@@ -25,18 +25,15 @@ object Driver {
       } text "The number to subdivide the rectangular mesh's height"
       opt[String]('d', "dim") action { (x, c) =>
         c.copy(dimensions = x)
-      } text "The number to subdivide the rectangular mesh's height"
+      } text "Specify the order of the dimensions in the format XYZ (you want the axis coming out of reef to be Z" +
+        "\n, e.g. if the axis coming out is X, then the dimensions might be ZYX "
       opt[File]('o', "out") required() valueName "<file.csv>" action { (x, c) =>
         c.copy(out = x)
-      } text "out is a required file property"
-
-
-      opt[Seq[File]]('f', "files") valueName "<file1.x3d>,<file2.x3d>..." action { (x, c) =>
+      } text "out is a required CSV file to write the results to"
+      opt[Seq[File]]('f', "files") required() valueName "<file1.x3d>,<file2.x3d>..." action { (x, c) =>
         c.copy(files = x)
-      } text "jars to include"
+      } text "x3d files to compare"
       note("some notes.\n")
-      help("help") text "prints this usage text"
-
     }
     parser.parse(args, ScoptParser()) match {
       case Some(config) =>
