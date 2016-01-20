@@ -84,7 +84,6 @@ object Driver {
                    csv2dOutput: List[AbstractSeq[Any] with io.Serializable],
                    file: File): Unit = {
     val names = files.map(x => x.getName)
-    //val f = new File()
     val writer = CSVWriter.open(file)
     writer.writeRow(List("", "width", "length"))
     writer.writeRow(List("bounding box size", values._1, values._2))
