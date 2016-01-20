@@ -10,4 +10,4 @@ libraryDependencies += "com.github.tototoshi" %% "scala-csv" % "1.2.2"
 libraryDependencies += "com.github.scopt" %% "scopt" % "3.3.0"
 
 resolvers += Resolver.sonatypeRepo("public")
-assemblyJarName in assembly := "mesh_quadrats.jar"
+assemblyJarName in assembly := "meshquadrats.jar"

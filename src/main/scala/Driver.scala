@@ -102,8 +102,8 @@ object Driver {
 
   def getQuadratCoordinates: ArrayBuffer[String] = {
     val quadrats = new ArrayBuffer[String]
-    for (i <- 0 to width - 1) {
-      for (j <- 0 to length - 1) {
+    for (i <- 0 until width) {
+      for (j <- 0 until length) {
         quadrats += ("(" + i + "," + j + ")")
       }
     }
