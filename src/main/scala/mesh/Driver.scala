@@ -45,27 +45,31 @@ object Driver {
     val passes = files.map(x => reader.read(x))
     val meshes = passes.map(x => new Mesh(x, new DimensionOrder(dimensions.value.getOrElse("XYZ"))))
     val boundingBox = geometry.findMaximumBoundingBox(meshes)
-    val widthValue = boundingBox.a.distanceXY(boundingBox.b)
-    val lengthValue = boundingBox.a.distanceXY(boundingBox.d)
-    val polygons = null
+    //val centreBoundingBox = boundingBox.centroid
+
+    //val widthValue = boundingBox.a.distanceXY(boundingBox.b)
+    //val lengthValue = boundingBox.a.distanceXY(boundingBox.d)
+    //val polygons = null
     // Calculate areas
-    val areas2d = meshes.map(x => x.get2DAreas(polygons))
-    val areas3d = meshes.map(x => x.getAreas(polygons))
+    //val quadratSize : Double = quadratSize.value.getOrElse(1)
+    val quadrats = buildQuadrats(boundingBox)
+    val areas2d = meshes.map(x => x.get2DAreas(quadrats))
+    val areas3d = meshes.map(x => x.getAreas(quadrats))
 
-    val quadrats: ArrayBuffer[String] = getQuadratCoordinates
-    val csv3dOutput = quadrats :: areas3d
-    val csv2dOutput = quadrats :: areas2d
+    val quadratInfo: ArrayBuffer[String] = getQuadratCoordinates
+    val csv3dOutput = quadratInfo :: areas3d
+    val csv2dOutput = quadratInfo :: areas2d
 
-    writeCsvFile(files, widthValue, lengthValue, csv3dOutput, csv2dOutput)
+    writeCsvFile(files, quadratSize.value.get, csv3dOutput, csv2dOutput)
   }
 
-  def writeCsvFile(files: List[File], widthValue: Double, lengthValue: Double, csv3dOutput: List[AbstractSeq[Any] with java.io.Serializable], csv2dOutput: List[AbstractSeq[Any] with java.io.Serializable]): Unit = {
+  def writeCsvFile(files: List[File], sizeOfQuadrat: Double, csv3dOutput: List[AbstractSeq[Any] with java.io.Serializable], csv2dOutput: List[AbstractSeq[Any] with java.io.Serializable]): Unit = {
     val names = files.map(x => x.getName)
     val f = new File(output.value.getOrElse(" "))
     val writer = CSVWriter.open(f)
-    writer.writeRow(List("", "width", "length"))
-    writer.writeRow(List("bounding box size", widthValue, lengthValue))
-    writer.writeRow(List("quadrat size", quadratSize.value.getOrElse(1)))
+    writer.writeRow(List("", "width"))
+    writer.writeRow(List("bounding box size", sizeOfQuadrat))
+    writer.writeRow(List("quadrat size", sizeOfQuadrat))
     writer.writeRow("")
     writer.writeRow(List("3D areas"))
     writer.writeRow("quadrat" :: names)
@@ -75,6 +79,43 @@ object Driver {
     writer.writeRow("quadrat" :: names)
     writer.writeAll(csv2dOutput.transpose)
     writer.close()
+  }
+
+  def buildQuadrats(box: Quadrilateral): List[Quadrilateral] = {
+
+    val size: Double = quadratSize.value.getOrElse(1).toDouble
+    val centroid = box.centroid
+    val quadrats = new ArrayBuffer[Quadrilateral]()
+    quadrats += new Quadrat(size, centroid)
+
+    val maxRight = centroid.distanceTo(new Line(box.b, box.c).midpoint)
+    val maxDown = centroid.distanceTo(new Line(box.c, box.d).midpoint)
+
+    var point = centroid
+
+
+    while (box.contains(point)) {
+      quadrats.append(new Quadrat(size, point))
+      point = new Vertex(point.x, point.y + size, point.z)
+    }
+
+
+    while (box.contains(point)) {
+      quadrats.append(new Quadrat(size, point))
+      point = new Vertex(point.x + size, point.y, point.z)
+    }
+
+    for (i <- 0 until (maxRight / size).toInt) {
+      for (j <- 0 until (maxDown / size).toInt) {
+        val points = List(new Vertex(centroid.x + i * size, centroid.y + j * size, centroid.z),
+          new Vertex(centroid.x + i * size, centroid.y - j * size, centroid.z),
+          new Vertex(centroid.x - i * size, centroid.y + j * size, centroid.z),
+          new Vertex(centroid.x - i * size, centroid.y - j * size, centroid.z))
+        for (p <- points) if (box.contains(point)) quadrats += new Quadrat(size, point)
+      }
+    }
+
+    quadrats.toList
   }
 
   def getQuadratCoordinates: ArrayBuffer[String] = {
