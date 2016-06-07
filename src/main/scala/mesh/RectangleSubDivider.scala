@@ -5,7 +5,7 @@ import scala.collection.mutable.ArrayBuffer
 class RectangleSubDivider(val widthRatio: Int, val lengthRatio: Int) {
 
 
-  def divideRectangle(rectangle: Polygon): List[Polygon] = {
+  def divideRectangle(rectangle: Quadrilateral): List[Quadrilateral] = {
 
     val verticesMatrix = Array.ofDim[Vertex](widthRatio + 1, lengthRatio + 1)
 
@@ -17,7 +17,7 @@ class RectangleSubDivider(val widthRatio: Int, val lengthRatio: Int) {
 
   }
 
-  private def addCorners(vertices: Array[Array[Vertex]], rectangle: Polygon): Unit = {
+  private def addCorners(vertices: Array[Array[Vertex]], rectangle: Quadrilateral): Unit = {
     vertices(0)(0) = rectangle.a
     vertices(widthRatio)(0) = rectangle.b
     vertices(widthRatio)(lengthRatio) = rectangle.c
@@ -51,12 +51,12 @@ class RectangleSubDivider(val widthRatio: Int, val lengthRatio: Int) {
     new Vertex((a * start.x + b * end.x) / (a + b), (a * start.y + b * end.y) / (a + b), 0)
   }
 
-  private def calculateQuadrats(vertices: Array[Array[Vertex]]): List[Polygon] = {
-    val polygons: ArrayBuffer[Polygon] = new ArrayBuffer[Polygon]()
+  private def calculateQuadrats(vertices: Array[Array[Vertex]]): List[Quadrilateral] = {
+    val polygons: ArrayBuffer[Quadrilateral] = new ArrayBuffer[Quadrilateral]()
     for (i <- 0 to widthRatio) {
       for (j <- 0 to lengthRatio) {
         if (i + 1 <= widthRatio && j + 1 <= lengthRatio) {
-          polygons.append(new Polygon(vertices(i)(j), vertices(i + 1)(j), vertices(i + 1)(j + 1), vertices(i)(j + 1)))
+          polygons.append(new Quadrilateral(vertices(i)(j), vertices(i + 1)(j), vertices(i + 1)(j + 1), vertices(i)(j + 1)))
         }
       }
     }

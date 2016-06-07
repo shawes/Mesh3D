@@ -18,13 +18,13 @@ class Geometry {
     math.tan((edge1.slope-edge2.slope)/(1-edge1.slope*edge2.slope))
   }
 
-  def findMaximumBoundingBox(meshList: List[Mesh]): Polygon = {
+  def findMaximumBoundingBox(meshList: List[Mesh]): Quadrilateral = {
 
     val maxQuadrilateral = findMaximumBoundingQuad(meshList)
     createRectangle(maxQuadrilateral)
   }
 
-  private def findMaximumBoundingQuad(meshList: List[Mesh]): Polygon = {
+  private def findMaximumBoundingQuad(meshList: List[Mesh]): Quadrilateral = {
 
     val cornerLeftBottom = new Vertex(meshList.map(f => f.corners._1.x).max,
       meshList.map(f => f.corners._1.y).max,
@@ -42,16 +42,16 @@ class Geometry {
       meshList.map(f => f.corners._4.y).min,
       meshList.map(f => f.corners._4.z).min)
 
-    new Polygon(cornerLeftBottom, cornerLeftTop, cornerRightTop, cornerRightBottom)
+    new Quadrilateral(cornerLeftBottom, cornerLeftTop, cornerRightTop, cornerRightBottom)
 
   }
 
-  private def createRectangle(quadrilateral: Polygon): Polygon = {
+  private def createRectangle(quadrilateral: Quadrilateral): Quadrilateral = {
 
     val leftEdge = new Line(quadrilateral.a, quadrilateral.b)
     val rightEdge = new Line(quadrilateral.d, quadrilateral.c)
     val alignedCorner = new Vertex(quadrilateral.a.x + math.abs(rightEdge.x_displacement), quadrilateral.a.y + math.abs(rightEdge.y_displacement), quadrilateral.a.z)
-    new Polygon(quadrilateral.a, alignedCorner, quadrilateral.c, quadrilateral.d)
+    new Quadrilateral(quadrilateral.a, alignedCorner, quadrilateral.c, quadrilateral.d)
 
   }
 

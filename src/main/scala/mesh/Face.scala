@@ -5,7 +5,7 @@ import scala.collection.mutable.ArrayBuffer
 class Face(val v1: Vertex, val v2: Vertex, val v3: Vertex) {
 
   val centroid = new Vertex((v1.x+v2.x+v3.x)/3,(v1.y+v2.y+v3.y)/3,0)
-  val polys = new ArrayBuffer[Polygon]
+  val polys = new ArrayBuffer[Quadrilateral]
   var used = false
 
   def area : Double = {

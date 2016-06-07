@@ -87,7 +87,7 @@ object Driver {
     quadrats
   }
 
-  def printArea(mesh: Mesh, polygons: List[Polygon]): Unit = {
+  def printArea(mesh: Mesh, polygons: List[Quadrilateral]): Unit = {
     println("--Mesh started--")
     println("Area = " + mesh.getTotalArea(polygons))
     println("--Mesh finished--")

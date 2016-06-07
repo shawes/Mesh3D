@@ -14,15 +14,15 @@ class Mesh(val tuple: (String, String), val order: DimensionOrder) {
   val corners = Tuple4(vertices.reduceLeft(min_x),
     vertices.reduceLeft(max_y),vertices.reduceLeft(max_x),vertices.reduceLeft(min_y))
 
-  def getTotalArea(polygons: List[Polygon]): Double = {
+  def getTotalArea(polygons: List[Quadrilateral]): Double = {
     getAreas(polygons).sum
   }
 
-  def getAreas(polygons: List[Polygon]): List[Double] = {
+  def getAreas(polygons: List[Quadrilateral]): List[Double] = {
     polygons.map(x => getAreaOfFacesInPolygon(x, is3DArea = true))
   }
 
-  private def getAreaOfFacesInPolygon(polygon: Polygon, is3DArea: Boolean): Double = {
+  private def getAreaOfFacesInPolygon(polygon: Quadrilateral, is3DArea: Boolean): Double = {
     var area = 0.0
     for(face <- faces if polygon.contains(face.centroid)) {
       if (is3DArea) area += face.area else area += face.area2D
@@ -30,7 +30,7 @@ class Mesh(val tuple: (String, String), val order: DimensionOrder) {
     area
   }
 
-  def get2DAreas(polygons: List[Polygon]): List[Double] = {
+  def get2DAreas(polygons: List[Quadrilateral]): List[Double] = {
     polygons.map(x => getAreaOfFacesInPolygon(x, is3DArea = false))
   }
 

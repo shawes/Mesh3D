@@ -3,10 +3,15 @@ package mesh
 import scala.Double._
 import scala.math._
 
-class Polygon(val a: Vertex, val b: Vertex, val c: Vertex, val d: Vertex) {
+class Quadrilateral(val a: Vertex, val b: Vertex, val c: Vertex, val d: Vertex) {
 
   val points = List(a, b, c, d)
   val edges = List((a, b), (b, c), (c, d), (d, a))
+
+  // Gets the centroid of a quadrilateral by calculating the midpoints of the diagonals and
+  // then the centroid is the midpoint of the line between these two midpoints
+  def centroid = new Line(new Line(a, c).midpoint, new Line(b, d).midpoint).midpoint
+
   
   def contains(vertex: Vertex): Boolean = {
     rayCasting(vertex)
