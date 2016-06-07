@@ -1,8 +1,10 @@
+package mesh
+
 import scala.math.atan2
 
 class Geometry {
 
-  def getAngleBetweenEdges2(edge1 : Edge, edge2:Edge) : Double = {
+  def getAngleBetweenEdges2(edge1: Line, edge2: Line): Double = {
 
     val angle1 = atan2(edge1.start.y - edge1.end.y,
       edge1.start.x - edge1.end.x)
@@ -12,7 +14,7 @@ class Geometry {
     math.abs(angle1-angle2)
   }
 
-  def getAngleBetweenEdges(edge1 : Edge, edge2:Edge) : Double = {
+  def getAngleBetweenEdges(edge1: Line, edge2: Line): Double = {
     math.tan((edge1.slope-edge2.slope)/(1-edge1.slope*edge2.slope))
   }
 
@@ -46,9 +48,9 @@ class Geometry {
 
   private def createRectangle(quadrilateral: Polygon): Polygon = {
 
-    val leftEdge = new Edge(quadrilateral.a, quadrilateral.b)
-    val rightEdge = new Edge(quadrilateral.d, quadrilateral.c)
-    val alignedCorner = new Vertex(quadrilateral.a.x + math.abs(rightEdge.x_disp), quadrilateral.a.y + math.abs(rightEdge.y_disp), quadrilateral.a.z)
+    val leftEdge = new Line(quadrilateral.a, quadrilateral.b)
+    val rightEdge = new Line(quadrilateral.d, quadrilateral.c)
+    val alignedCorner = new Vertex(quadrilateral.a.x + math.abs(rightEdge.x_displacement), quadrilateral.a.y + math.abs(rightEdge.y_displacement), quadrilateral.a.z)
     new Polygon(quadrilateral.a, alignedCorner, quadrilateral.c, quadrilateral.d)
 
   }

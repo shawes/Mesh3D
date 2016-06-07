@@ -1,11 +1,12 @@
+package mesh
+
 import scala.collection.mutable.ArrayBuffer
 
 class Face(val v1: Vertex, val v2: Vertex, val v3: Vertex) {
 
   val centroid = new Vertex((v1.x+v2.x+v3.x)/3,(v1.y+v2.y+v3.y)/3,0)
-  var used = false
-
   val polys = new ArrayBuffer[Polygon]
+  var used = false
 
   def area : Double = {
     val edge1 = v1.distanceTo(v2)

@@ -1,7 +1,9 @@
-import java.io
+package mesh
+
 import java.io.File
 
 import com.github.tototoshi.csv.CSVWriter
+import mesh.io.MeshReader
 import org.clapper.argot._
 
 import scala.collection.AbstractSeq
@@ -57,7 +59,7 @@ object Driver {
     writeCsvFile(files, widthValue, lengthValue, csv3dOutput, csv2dOutput)
   }
 
-  def writeCsvFile(files: List[File], widthValue: Double, lengthValue: Double, csv3dOutput: List[AbstractSeq[Any] with io.Serializable], csv2dOutput: List[AbstractSeq[Any] with io.Serializable]): Unit = {
+  def writeCsvFile(files: List[File], widthValue: Double, lengthValue: Double, csv3dOutput: List[AbstractSeq[Any] with java.io.Serializable], csv2dOutput: List[AbstractSeq[Any] with java.io.Serializable]): Unit = {
     val names = files.map(x => x.getName)
     val f = new File(output.value.getOrElse(" "))
     val writer = CSVWriter.open(f)

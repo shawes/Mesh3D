@@ -1,3 +1,5 @@
+package mesh
+
 import scala.collection.mutable.ArrayBuffer
 
 class RectangleSubDivider(val widthRatio: Int, val lengthRatio: Int) {
@@ -23,30 +25,30 @@ class RectangleSubDivider(val widthRatio: Int, val lengthRatio: Int) {
   }
 
   private def calculateSides(vertices: Array[Array[Vertex]]): Unit = {
-    for (i <- 1 to widthRatio - 1) {
+    for (i <- 1 until widthRatio) {
       vertices(i)(0) = calculateRatioPoint(vertices(0)(0), vertices(widthRatio)(0), widthRatio - i, i)
       vertices(i)(lengthRatio) = calculateRatioPoint(vertices(0)(lengthRatio), vertices(widthRatio)(lengthRatio), widthRatio - i, i)
     }
   }
 
-  private def calculateRatioPoint(start: Vertex, end: Vertex, a: Int, b: Int): Vertex = {
-    new Vertex((a * start.x + b * end.x) / (a + b), (a * start.y + b * end.y) / (a + b), 0)
-  }
-
   private def calculateTops(vertices: Array[Array[Vertex]]): Unit = {
-    for (i <- 1 to lengthRatio - 1) {
+    for (i <- 1 until lengthRatio) {
       vertices(0)(i) = calculateRatioPoint(vertices(0)(0), vertices(0)(lengthRatio), lengthRatio - i, i)
       vertices(widthRatio)(i) = calculateRatioPoint(vertices(widthRatio)(0), vertices(widthRatio)(lengthRatio), lengthRatio - i, i)
     }
   }
 
   private def calculateInsidePoints(vertices: Array[Array[Vertex]]): Unit = {
-    for (i <- 1 to lengthRatio - 1) {
-      for (j <- 1 to widthRatio - 1) {
+    for (i <- 1 until lengthRatio) {
+      for (j <- 1 until widthRatio) {
         val vertex = calculateRatioPoint(vertices(0)(i), vertices(widthRatio)(i), widthRatio - j, j)
         vertices(j)(i) = vertex
       }
     }
+  }
+
+  private def calculateRatioPoint(start: Vertex, end: Vertex, a: Int, b: Int): Vertex = {
+    new Vertex((a * start.x + b * end.x) / (a + b), (a * start.y + b * end.y) / (a + b), 0)
   }
 
   private def calculateQuadrats(vertices: Array[Array[Vertex]]): List[Polygon] = {

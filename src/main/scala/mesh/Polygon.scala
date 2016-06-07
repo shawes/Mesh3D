@@ -1,3 +1,4 @@
+package mesh
 
 import scala.Double._
 import scala.math._

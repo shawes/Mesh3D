@@ -1,5 +1,8 @@
-import scala.xml.XML
+package mesh.io
+
 import java.io.File
+
+import scala.xml.XML
 
 class MeshReader() {
 

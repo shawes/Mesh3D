@@ -1,3 +1,4 @@
+package mesh
 
 class Vertex(val x: Double, val y:Double, val z:Double) {
 

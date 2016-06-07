@@ -1,3 +1,5 @@
+package mesh
+
 import scala.collection.mutable.ArrayBuffer
 
 class Mesh(val tuple: (String, String), val order: DimensionOrder) {
