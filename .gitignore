@@ -71,7 +71,7 @@ fabric.properties
 # modules.xml
 
 
-
 ### Added ####
-*.x3d
+files/
 
+project/project/
