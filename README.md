@@ -13,7 +13,7 @@ OPTIONS
 
 --width n   The number to subdivide the rectangular mesh's width.
 
---dim XYZ   The order of the axis (it assumes XYZ)
+--dim XYZ   The order of the axis (it assumes WLH)
 
 
 PARAMETERS
