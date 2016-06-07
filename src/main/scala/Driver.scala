@@ -13,8 +13,7 @@ object Driver {
 
   // Setup the command line arguments
   val parser = new ArgotParser("mesh_quadrats", preUsage = Some("Mesh Quadrats, Author: Steven Hawes, Version 1.0"))
-  val width = parser.option[Int](List("width"), "n", "The number to subdivide the rectangular mesh's width.")
-  val length = parser.option[Int](List("length"), "n", "The number to subdivide the rectangular mesh's length.")
+  val quadratSize = parser.option[Int](List("quadrat_size"), "n", "The size of a quadrat (metres).")
   val dimensions = parser.option[String](List("dimensions"), "WLH", "The dimensions of the input files")
   val output = parser.parameter[String]("outputfile", "Output file to which to write (a .csv)", optional = false)
   val input = parser.multiParameter[File]("input", "Input .x3d files to read. If not specified, use stdin.", optional = true) {
@@ -43,13 +42,10 @@ object Driver {
     val files = input.value.toList
     val passes = files.map(x => reader.read(x))
     val meshes = passes.map(x => new Mesh(x, new DimensionOrder(dimensions.value.getOrElse("XYZ"))))
-    val rectangle = geometry.findMaximumBoundingBox(meshes)
-    val widthValue = rectangle.a.distanceXY(rectangle.b)
-    val lengthValue = rectangle.a.distanceXY(rectangle.d)
-    val rectangleSubDivider = new RectangleSubDivider(widthRatio = width.value.getOrElse(1),
-      lengthRatio = length.value.getOrElse(1))
-    val polygons = rectangleSubDivider.divideRectangle(rectangle)
-
+    val boundingBox = geometry.findMaximumBoundingBox(meshes)
+    val widthValue = boundingBox.a.distanceXY(boundingBox.b)
+    val lengthValue = boundingBox.a.distanceXY(boundingBox.d)
+    val polygons = null
     // Calculate areas
     val areas2d = meshes.map(x => x.get2DAreas(polygons))
     val areas3d = meshes.map(x => x.getAreas(polygons))
@@ -67,7 +63,7 @@ object Driver {
     val writer = CSVWriter.open(f)
     writer.writeRow(List("", "width", "length"))
     writer.writeRow(List("bounding box size", widthValue, lengthValue))
-    writer.writeRow(List("quadrat size", widthValue / width.value.getOrElse(1), lengthValue / length.value.getOrElse(1)))
+    writer.writeRow(List("quadrat size", quadratSize.value.getOrElse(1)))
     writer.writeRow("")
     writer.writeRow(List("3D areas"))
     writer.writeRow("quadrat" :: names)
@@ -81,8 +77,8 @@ object Driver {
 
   def getQuadratCoordinates: ArrayBuffer[String] = {
     val quadrats = new ArrayBuffer[String]
-    for (i <- 0 to width.value.getOrElse(1) - 1) {
-      for (j <- 0 to length.value.getOrElse(1) - 1) {
+    for (i <- 0 until quadratSize.value.getOrElse(1)) {
+      for (j <- 0 until quadratSize.value.getOrElse(1)) {
         quadrats += ("(" + i + "," + j + ")")
       }
     }
