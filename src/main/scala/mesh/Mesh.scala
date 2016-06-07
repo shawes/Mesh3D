@@ -1,5 +1,7 @@
 package mesh
 
+import mesh.shapes.{Face, Quadrilateral, Vertex}
+
 import scala.collection.mutable.ArrayBuffer
 
 class Mesh(val tuple: (String, String), val order: DimensionOrder) {

@@ -1,5 +1,7 @@
 package mesh
 
+import mesh.shapes.{Quadrilateral, Vertex}
+
 import scala.collection.mutable.ArrayBuffer
 
 class RectangleSubDivider(val widthRatio: Int, val lengthRatio: Int) {

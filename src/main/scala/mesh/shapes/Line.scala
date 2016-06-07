@@ -1,4 +1,4 @@
-package mesh
+package mesh.shapes
 
 class Line(val start: Vertex, val end: Vertex) {
 

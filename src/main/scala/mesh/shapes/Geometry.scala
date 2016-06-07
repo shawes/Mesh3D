@@ -1,4 +1,6 @@
-package mesh
+package mesh.shapes
+
+import mesh.Mesh
 
 import scala.math.atan2
 

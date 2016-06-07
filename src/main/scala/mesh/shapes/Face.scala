@@ -1,4 +1,4 @@
-package mesh
+package mesh.shapes
 
 import scala.collection.mutable.ArrayBuffer
 
