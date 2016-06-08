@@ -17,10 +17,10 @@ class Mesh(val tuple: (String, String), val order: DimensionOrder) {
     vertices.reduceLeft(max_y),vertices.reduceLeft(max_x),vertices.reduceLeft(min_y))
 
   def getTotalArea(polygons: List[Quadrilateral]): Double = {
-    getAreas(polygons).sum
+    getThreeDimensionAreas(polygons).sum
   }
 
-  def getAreas(polygons: List[Quadrilateral]): List[Double] = {
+  def getThreeDimensionAreas(polygons: List[Quadrilateral]): List[Double] = {
     polygons.map(x => getAreaOfFacesInPolygon(x, is3DArea = true))
   }
 
@@ -32,7 +32,7 @@ class Mesh(val tuple: (String, String), val order: DimensionOrder) {
     area
   }
 
-  def get2DAreas(polygons: List[Quadrilateral]): List[Double] = {
+  def getTwoDimensionAreas(polygons: List[Quadrilateral]): List[Double] = {
     polygons.map(x => getAreaOfFacesInPolygon(x, is3DArea = false))
   }
 
