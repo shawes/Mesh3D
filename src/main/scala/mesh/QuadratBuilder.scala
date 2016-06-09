@@ -28,7 +28,6 @@ class QuadratBuilder {
         for (p <- points) if (box.contains(p)) quadrats += new Quadrat(size, p)
       }
     }
-
-    quadrats.toList
+    quadrats.toList.distinct
   }
 }

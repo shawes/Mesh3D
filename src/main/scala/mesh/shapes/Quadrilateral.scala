@@ -5,8 +5,8 @@ import scala.math._
 
 class Quadrilateral(val a: Vertex, val b: Vertex, val c: Vertex, val d: Vertex) {
 
-  val points = List(a, b, c, d)
-  val edges = List((a, b), (b, c), (c, d), (d, a))
+  val vertices = List(a, b, c, d)
+  val edges = List(new Line(a, b), new Line(b, c), new Line(c, d), new Line(d, a))
 
   // Gets the centroid of a quadrilateral by calculating the midpoints of the diagonals and
   // then the centroid is the midpoint of the line between these two midpoints
@@ -17,22 +17,22 @@ class Quadrilateral(val a: Vertex, val b: Vertex, val c: Vertex, val d: Vertex) 
     rayCasting(vertex)
   }
 
-  override def toString = points.toString
+  override def toString = vertices.toString
 
-  private def rayCasting(p: Vertex) = edges.count(raySegI(p, _)) % 2 != 0
+  private def rayCasting(point: Vertex) = edges.count(raySegI(point, _)) % 2 != 0
 
-  private def raySegI(p: Vertex, e: (Vertex, Vertex)): Boolean = {
+  private def raySegI(point: Vertex, edge: Line): Boolean = {
     val epsilon = 0.00001
-    if (e._1.y > e._2.y)
-      return raySegI(p, (e._2, e._1))
-    if (p.y == e._1.y || p.y == e._2.y)
-      return raySegI(new Vertex(p.x, p.y + epsilon,0), e)
-    if (p.y > e._2.y || p.y < e._1.y || p.x > max(e._1.x, e._2.x))
+    if (edge.start.y > edge.end.y)
+      return raySegI(point, new Line(edge.end, edge.start))
+    if (point.y == edge.start.y || point.y == edge.end.y)
+      return raySegI(new Vertex(point.x, point.y + epsilon, 0), edge)
+    if (point.y > edge.end.y || point.y < edge.start.y || point.x > max(edge.start.x, edge.end.x))
       return false
-    if (p.x < min(e._1.x, e._2.x))
+    if (point.x < min(edge.start.x, edge.end.x))
       return true
-    val left = if (abs(e._1.x - p.x) > MinValue) (p.y - e._1.y) / (p.x - e._1.x) else MaxValue
-    val right = if (abs(e._1.x - e._2.x) > MinValue) (e._2.y - e._1.y) / (e._2.x - e._1.x) else MaxValue
+    val left = if (abs(edge.start.x - point.x) > MinValue) (point.y - edge.start.y) / (point.x - edge.start.x) else MaxValue
+    val right = if (abs(edge.start.x - edge.end.x) > MinValue) (edge.end.y - edge.start.y) / (edge.end.x - edge.start.x) else MaxValue
     left >= right
   }
 

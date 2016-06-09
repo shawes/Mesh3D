@@ -32,11 +32,11 @@ class MeshCsvWriter {
     writer.writeRow("")
     writer.writeRow(List("3D areas"))
     writer.writeRow("quadrat" :: names)
-    writer.writeAll(csv3dOutput.transpose)
+    writer.writeAll(csv3dOutput)
     writer.writeRow("")
     writer.writeRow(List("2D areas"))
     writer.writeRow("quadrat" :: names)
-    writer.writeAll(csv2dOutput.transpose)
+    writer.writeAll(csv2dOutput)
     writer.close()
 
   }
