@@ -10,4 +10,10 @@ class Vertex(val x: Double, val y:Double, val z:Double) {
 
   override def toString = "x=" + x + ", y=" + y + ", z=" + z
 
+  override def equals(that: Any): Boolean = that match {
+    case that: Vertex => that.x == this.x && that.y == this.y && that.z == this.z
+    case _ => false
+  }
+
+
 }

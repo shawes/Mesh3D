@@ -13,7 +13,7 @@ object Driver {
   // Setup the command line arguments
   val parser = new ArgotParser("mesh_quadrats", preUsage = Some("Mesh Quadrats, Author: Steven Hawes, Version 1.0"))
   val quadratSize = parser.option[Int](List("quadrat_size"), "n", "The size of a quadrat (metres).")
-  val dimensions = parser.option[String](List("dimensions"), "WLH", "The dimensions of the input files")
+  val dimensions = parser.option[String](List("dimensions"), "WLH", "The dimensions of the input files (width-length-height)")
   val output = parser.parameter[String]("outputfile", "Output file to which to write (a .csv)", optional = false)
   val input = parser.multiParameter[File]("input", "Input .x3d files to read. If not specified, use stdin.", optional = true) {
     (s, opt) =>
@@ -48,10 +48,8 @@ object Driver {
     val areas2d = meshes.map(x => x.getTwoDimensionAreas(quadrats))
     val areas3d = meshes.map(x => x.getThreeDimensionAreas(quadrats))
     val writer = new MeshCsvWriter()
-    //writer.write(output.value.get, files, quadratSize.value.get, areas3d, areas2d)
+    writer.write(output.value.get, files, quadrats, quadratSize.value.get, areas3d, areas2d)
   }
-
-
 
   def printArea(mesh: Mesh, polygons: List[Quadrilateral]): Unit = {
     println("--Mesh started--")

@@ -4,12 +4,13 @@ import mesh.shapes.{Face, Quadrilateral, Vertex}
 
 import scala.collection.mutable.ArrayBuffer
 
-class Mesh(val tuple: (String, String), val order: DimensionOrder) {
-
-  // These values will need to change depending on the orientation of the axis in mesh
-  val X = 1
-  val Y = 2
-  val Z = 0
+/**
+  *
+  * @constructor creates a new mesh
+  * @param values a tuple containing the (faces, vertices) as string objects
+  * @param order  specifies the order of dimensions of the 3D mesh (width-length-height as XYZ)
+  */
+class Mesh(val values: (String, String), val order: DimensionOrder) {
 
   val vertices = constructVerticesList()
   val faces = constructFacesList()
@@ -24,6 +25,10 @@ class Mesh(val tuple: (String, String), val order: DimensionOrder) {
     polygons.map(x => getAreaOfFacesInPolygon(x, is3DArea = true))
   }
 
+  def getTwoDimensionAreas(polygons: List[Quadrilateral]): List[Double] = {
+    polygons.map(x => getAreaOfFacesInPolygon(x, is3DArea = false))
+  }
+
   private def getAreaOfFacesInPolygon(polygon: Quadrilateral, is3DArea: Boolean): Double = {
     var area = 0.0
     for(face <- faces if polygon.contains(face.centroid)) {
@@ -32,16 +37,12 @@ class Mesh(val tuple: (String, String), val order: DimensionOrder) {
     area
   }
 
-  def getTwoDimensionAreas(polygons: List[Quadrilateral]): List[Double] = {
-    polygons.map(x => getAreaOfFacesInPolygon(x, is3DArea = false))
-  }
-
   /*
   Uses the constants X,Y,Z to determine the width and the length of the mesh as orientated
   in the mesh. It assumes the width is X, the length is Y and Z is the height.
    */
   private def constructVerticesList() : ArrayBuffer[Vertex] = {
-    val verticesArray = tuple._2.split(" ").array
+    val verticesArray = values._2.split(" ").array
     val verticesBuffer = new ArrayBuffer[Vertex]
     for (i <- verticesArray.indices.by(3)) {
       val vertex = new Vertex(verticesArray(i + order.getFirst).toDouble,
@@ -53,12 +54,12 @@ class Mesh(val tuple: (String, String), val order: DimensionOrder) {
   }
 
   private def constructFacesList() : ArrayBuffer[Face] = {
-    val facesArray: Array[String] = tuple._1.split("-1")
+    val facesArray: Array[String] = values._1.split("-1")
     val facesBuffer = new ArrayBuffer[Face]()
     for(i <- facesArray.indices) {
       val str:String = facesArray(i).trim
-      val verticies = str.split(" ")
-      val face = new Face(vertices(verticies(0).toInt), vertices(verticies(1).toInt), vertices(verticies(2).toInt))
+      val verticesString = str.split(" ")
+      val face = new Face(vertices(verticesString(0).toInt), vertices(verticesString(1).toInt), vertices(verticesString(2).toInt))
       facesBuffer.append(face)
     }
     facesBuffer
