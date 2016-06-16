@@ -32,7 +32,7 @@ class MeshCsvWriter {
     val f = new File(file)
     val writer = CSVWriter.open(f)
     writer.writeRow(List("quadrat size (m)", sizeOfQuadrat))
-    writer.writeRow(List("quadrat centroid" :: "dimension" :: names))
+    writer.writeRow(List("quadrat centroid", "dimension", names))
     writer.writeAll(areas3dTransposed)
     writer.writeAll(areas2dTransposed)
     writer.close()
