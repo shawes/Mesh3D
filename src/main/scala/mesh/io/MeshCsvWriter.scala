@@ -20,23 +20,21 @@ class MeshCsvWriter {
             areas3d: List[AbstractSeq[Any] with java.io.Serializable],
             areas2d: List[AbstractSeq[Any] with java.io.Serializable]): Unit = {
 
-    val quadratInfo: List[String] = getQuadratCoordinates(quadrats)
-    val three_list = List.fill(quadratInfo.size)("3")
-    val two_list = List.fill(quadratInfo.size)("2")
-    val csv3dOutput = quadratInfo :: three_list :: areas3d
-    val csv2dOutput = quadratInfo :: two_list :: areas2d
+    val quadratCentroids: List[String] = getQuadratCoordinates(quadrats)
+    val three_list = List.fill(quadratCentroids.size)("3")
+    val two_list = List.fill(quadratCentroids.size)("2")
+    val areas3dTransposed = (quadratCentroids :: three_list :: areas3d).transpose
+    val areas2dTransposed = (quadratCentroids :: two_list :: areas2d).transpose
 
+    // strip the file extension off the mesh names
+    val names = files.map(x => x.getName.split('.')(0))
 
-    val names = files.map(x => x.getName)
     val f = new File(file)
     val writer = CSVWriter.open(f)
-    writer.writeRow(List("", "width"))
-    writer.writeRow(List("bounding box size", sizeOfQuadrat))
     writer.writeRow(List("quadrat size (m)", sizeOfQuadrat))
-    writer.writeRow(List("quadrat centroid", "dimension") :: names)
-    writer.writeAll(csv3dOutput.transpose)
-    writer.writeRow("quadrat" :: names)
-    writer.writeAll(csv2dOutput.transpose)
+    writer.writeRow(List("quadrat centroid" :: "dimension" :: names))
+    writer.writeAll(areas3dTransposed)
+    writer.writeAll(areas2dTransposed)
     writer.close()
 
   }

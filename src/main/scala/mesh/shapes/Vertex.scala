@@ -15,5 +15,8 @@ class Vertex(val x: Double, val y:Double, val z:Double) {
     case _ => false
   }
 
+  override def hashCode: Int = x.hashCode() + y.hashCode() + z.hashCode()
+
+
 
 }

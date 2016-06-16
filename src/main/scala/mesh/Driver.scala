@@ -44,6 +44,7 @@ object Driver {
     println("Bounding box: " + boundingBox)
     val quadratBuilder = new QuadratBuilder
     val quadrats = quadratBuilder.build(boundingBox, quadratSize.value.get)
+
     println("There are this many quadrats: " + quadrats.size)
     val areas2d = meshes.map(x => x.getTwoDimensionAreas(quadrats))
     val areas3d = meshes.map(x => x.getThreeDimensionAreas(quadrats))
@@ -55,6 +56,10 @@ object Driver {
     println("--Mesh started--")
     println("Area = " + mesh.getTotalArea(polygons))
     println("--Mesh finished--")
+  }
+
+  def getUniqueQuadrats(quadrats: List[Quadrat]): List[Quadrat] = {
+    quadrats
   }
 
 
