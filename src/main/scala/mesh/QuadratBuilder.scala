@@ -35,9 +35,8 @@ class QuadratBuilder {
           new Vertex(centroid.x + (i * size), centroid.y - (j * size), centroid.z),
           new Vertex(centroid.x - (i * size), centroid.y + (j * size), centroid.z),
           new Vertex(centroid.x - (i * size), centroid.y - (j * size), centroid.z))
-
         val validPoints = points.filter(p => box.contains(p))
-        for (p <- validPoints) {
+        for (p <- points) {
           println("Adding quadrat " + p)
           quadrats += new Quadrat(size, p)
         }
@@ -45,4 +44,5 @@ class QuadratBuilder {
     }
     quadrats.toList.distinct
   }
+
 }

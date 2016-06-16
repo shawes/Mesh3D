@@ -20,29 +20,35 @@ class Geometry {
     math.tan((edge1.slope-edge2.slope)/(1-edge1.slope*edge2.slope))
   }
 
-  def findMaximumBoundingBox(meshList: List[Mesh]): Quadrilateral = {
-
-    val maxQuadrilateral = findMaximumBoundingQuad(meshList)
-    createRectangle(maxQuadrilateral)
+  def getNewPoint(oldPoint: Vertex, slope: Double, distance: Double): Vertex = {
+    val r = math.sqrt(1 + math.pow(slope, 2))
+    new Vertex(oldPoint.x + distance / r, oldPoint.y + (distance * slope) / r, oldPoint.z)
   }
 
-  private def findMaximumBoundingQuad(meshList: List[Mesh]): Quadrilateral = {
+  def findMaximumBoundingBox(meshList: List[Mesh]): Quadrilateral = {
 
-    val cornerLeftBottom = new Vertex(meshList.map(f => f.corners._1.x).max,
-      meshList.map(f => f.corners._1.y).max,
-      meshList.map(f => f.corners._1.z).min)
+    val maxQuadrilateral = findMinimumBoundingBox(meshList)
+    createRectangle(maxQuadrilateral)
+    maxQuadrilateral
+  }
 
-    val cornerLeftTop = new Vertex(meshList.map(f => f.corners._2.x).max,
-      meshList.map(f => f.corners._2.y).max,
-      meshList.map(f => f.corners._2.z).min)
+  private def findMinimumBoundingBox(meshList: List[Mesh]): Quadrilateral = {
 
-    val cornerRightTop = new Vertex(meshList.map(f => f.corners._3.x).min,
-      meshList.map(f => f.corners._3.y).min,
-      meshList.map(f => f.corners._3.z).min)
+    val cornerLeftBottom = new Vertex(meshList.map(f => f.extremes._3).min,
+      meshList.map(f => f.extremes._4).min,
+      0)
 
-    val cornerRightBottom = new Vertex(meshList.map(f => f.corners._4.x).min,
-      meshList.map(f => f.corners._4.y).min,
-      meshList.map(f => f.corners._4.z).min)
+    val cornerLeftTop = new Vertex(meshList.map(f => f.extremes._3).min,
+      meshList.map(f => f.extremes._2).max,
+      0)
+
+    val cornerRightTop = new Vertex(meshList.map(f => f.extremes._1).max,
+      meshList.map(f => f.extremes._2).max,
+      0)
+
+    val cornerRightBottom = new Vertex(meshList.map(f => f.extremes._1).max,
+      meshList.map(f => f.extremes._4).min,
+      0)
 
     new Quadrilateral(cornerLeftBottom, cornerLeftTop, cornerRightTop, cornerRightBottom)
 

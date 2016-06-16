@@ -14,8 +14,8 @@ class Mesh(val values: (String, String), val order: DimensionOrder) {
 
   val vertices = constructVerticesList()
   val faces = constructFacesList()
-  val corners = Tuple4(vertices.reduceLeft(min_x),
-    vertices.reduceLeft(max_y),vertices.reduceLeft(max_x),vertices.reduceLeft(min_y))
+  val extremes = Tuple4(vertices.reduceLeft(max_x).x,
+    vertices.reduceLeft(max_y).y, vertices.reduceLeft(min_x).x, vertices.reduceLeft(min_y).y)
 
   def getTotalArea(polygons: List[Quadrilateral]): Double = {
     getThreeDimensionAreas(polygons).sum
