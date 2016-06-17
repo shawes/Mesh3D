@@ -23,20 +23,20 @@ class QuadratBuilder {
 
     println("centroid is " + centroid)
 
-    val distanceToRightEdge = centroid.distanceTo(new Line(box.b, box.c).midpoint)
-    val distanceToBottomEdge = centroid.distanceTo(new Line(box.c, box.d).midpoint)
+    val distanceToEdgeAD = centroid.distanceTo(new Line(box.d, box.a).midpoint)
+    val distanceToEdgeCD = centroid.distanceTo(new Line(box.c, box.d).midpoint)
 
-    println("dist right=" + distanceToRightEdge + ", dist down =" + distanceToBottomEdge)
+    println("dist right=" + distanceToEdgeAD + ", dist down =" + distanceToEdgeCD)
 
-    for (i <- 0 until (distanceToRightEdge / size).toInt) {
-      for (j <- 0 until (distanceToBottomEdge / size).toInt) {
+    for (i <- 0 until (distanceToEdgeCD / size).toInt + 1) {
+      for (j <- 0 until (distanceToEdgeAD / size).toInt + 1) {
         println("iteration (" + i + "," + j + ")")
         val points = List(new Vertex(centroid.x + i * size, centroid.y + (j * size), centroid.z),
           new Vertex(centroid.x + (i * size), centroid.y - (j * size), centroid.z),
           new Vertex(centroid.x - (i * size), centroid.y + (j * size), centroid.z),
           new Vertex(centroid.x - (i * size), centroid.y - (j * size), centroid.z))
         val validPoints = points.filter(p => box.contains(p))
-        for (p <- points) {
+        for (p <- validPoints) {
           println("Adding quadrat " + p)
           quadrats += new Quadrat(size, p)
         }
