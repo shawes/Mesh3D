@@ -19,27 +19,24 @@ class QuadratBuilder {
 
     val centroid = box.centroid
     val quadrats = new ListBuffer[Quadrat]()
-    quadrats += new Quadrat(size, centroid)
+    quadrats += new Quadrat((0, 0), size, centroid)
 
-    println("centroid is " + centroid)
+    //println("centroid is " + centroid)
 
     val distanceToEdgeAD = centroid.distanceTo(new Line(box.d, box.a).midpoint)
     val distanceToEdgeCD = centroid.distanceTo(new Line(box.c, box.d).midpoint)
 
-    println("dist right=" + distanceToEdgeAD + ", dist down =" + distanceToEdgeCD)
+    //println("dist right=" + distanceToEdgeAD + ", dist down =" + distanceToEdgeCD)
 
     for (i <- 0 until (distanceToEdgeCD / size).toInt + 1) {
       for (j <- 0 until (distanceToEdgeAD / size).toInt + 1) {
-        println("iteration (" + i + "," + j + ")")
-        val points = List(new Vertex(centroid.x + i * size, centroid.y + (j * size), centroid.z),
-          new Vertex(centroid.x + (i * size), centroid.y - (j * size), centroid.z),
-          new Vertex(centroid.x - (i * size), centroid.y + (j * size), centroid.z),
-          new Vertex(centroid.x - (i * size), centroid.y - (j * size), centroid.z))
-        val validPoints = points.filter(p => box.contains(p))
-        for (p <- validPoints) {
-          println("Adding quadrat " + p)
-          quadrats += new Quadrat(size, p)
-        }
+        val fourNewQuadrats =
+          List(new Quadrat((i, j), size, new Vertex(centroid.x + i * size, centroid.y + (j * size), centroid.z)),
+            new Quadrat((i, j), size, new Vertex(centroid.x + (i * size), centroid.y - (j * size), centroid.z)),
+            new Quadrat((i, j), size, new Vertex(centroid.x - (i * size), centroid.y + (j * size), centroid.z)),
+            new Quadrat((i, j), size, new Vertex(centroid.x - (i * size), centroid.y - (j * size), centroid.z)))
+        val quadratsCentroidInsideBoundingBox = fourNewQuadrats.filter(q => box.contains(q.midpoint))
+        quadrats ++= quadratsCentroidInsideBoundingBox
       }
     }
     quadrats.toList.distinct

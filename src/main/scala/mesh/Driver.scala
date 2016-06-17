@@ -47,7 +47,9 @@ object Driver {
 
     println("There are this many quadrats: " + quadrats.size)
     val areas2d = meshes.map(x => x.getTwoDimensionAreas(quadrats))
+    println("Calculated 2D areas")
     val areas3d = meshes.map(x => x.getThreeDimensionAreas(quadrats))
+    println("Calculated 3D areas")
     val writer = new MeshCsvWriter()
     writer.write(output.value.get, files, quadrats, quadratSize.value.get, areas3d, areas2d)
   }
