@@ -37,7 +37,7 @@ object Driver {
   def runMesh3D(): Unit = {
     val reader = new MeshReader()
     val geometry = new Geometry()
-    val files = input.value.toList
+    val files = input.value.toList.par
     val passes = files.map(x => reader.read(x))
     val meshes = passes.map(x => new Mesh(x, new DimensionOrder(dimensions.value.getOrElse("XYZ"))))
     val boundingBox = geometry.findMaximumBoundingBox(meshes)
@@ -51,7 +51,7 @@ object Driver {
     val areas3d = meshes.map(x => x.getThreeDimensionAreas(quadrats))
     println("Calculated 3D areas")
     val writer = new MeshCsvWriter()
-    writer.write(output.value.get, files, quadrats, quadratSize.value.get, areas3d, areas2d)
+    writer.write(output.value.get, files.toList, quadrats, quadratSize.value.get, areas3d.toList, areas2d.toList)
   }
 
   def printArea(mesh: Mesh, polygons: List[Quadrilateral]): Unit = {

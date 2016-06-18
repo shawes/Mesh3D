@@ -3,6 +3,7 @@ package mesh
 import mesh.shapes.{Face, Quadrilateral, Vertex}
 
 import scala.collection.mutable.ArrayBuffer
+import scala.collection.parallel.ParSeq
 
 /**
   *
@@ -53,7 +54,67 @@ class Mesh(val values: (String, String), val order: DimensionOrder) {
     verticesBuffer
   }
 
-  private def constructFacesList() : ArrayBuffer[Face] = {
+  /*  private def constructVerticesList2() : ArrayBuffer[Vertex] = {
+      val iterator = values._2.iterator
+      val verticesBuffer = new ArrayBuffer[Vertex]
+      val number :StringBuilder = new StringBuilder()
+      while(iterator.hasNext) {
+        var character = iterator.next()
+        while (character != ' ' && iterator.hasNext) {
+          number + character
+          character = iterator.next()
+        }
+        var first, second, third : Double = 0
+        if(number.nonEmpty) {
+          if(number.contains('e')) {
+            first = 0
+          } else {
+            first = number.toString().toDouble
+          }
+        }
+        number.clear()
+        if(character == ' ' && iterator.hasNext) character = iterator.next()
+
+        character = iterator.next()
+        while (character != ' ' && iterator.hasNext) {
+          number + character
+          character = iterator.next()
+        }
+        if(number.nonEmpty) {
+          if(number.contains('e')) {
+            second = 0
+          } else {
+            second = number.toString().toDouble
+          }
+        }
+        number.clear()
+        if(character == ' ' && iterator.hasNext) character = iterator.next()
+
+
+        character = iterator.next()
+        while (character != ' ' && iterator.hasNext) {
+          number + character
+          character = iterator.next()
+        }
+        if(number.nonEmpty) {
+          if(number.contains('e')) {
+            third = 0
+          } else {
+            third = number.toString().toDouble
+          }
+        }
+        number.clear()
+        if(character == ' ' && iterator.hasNext) character = iterator.next()
+
+
+        val vertex = new Vertex(first,second,third)
+        println("created vertex "+vertex)
+        verticesBuffer.append(vertex)
+      }
+      verticesBuffer
+    }*/
+
+  private def constructFacesList(): ParSeq[Face] = {
     val facesArray: Array[String] = values._1.split("-1")
     val facesBuffer = new ArrayBuffer[Face]()
     for(i <- facesArray.indices) {
@@ -62,7 +123,7 @@ class Mesh(val values: (String, String), val order: DimensionOrder) {
       val face = new Face(vertices(verticesString(0).toInt), vertices(verticesString(1).toInt), vertices(verticesString(2).toInt))
       facesBuffer.append(face)
     }
-    facesBuffer
+    facesBuffer.toList.par
   }
 
   private def min_x(s1: Vertex, s2: Vertex): Vertex = if (s1.x < s2.x) s1 else s2
