@@ -1,6 +1,6 @@
-package mesh
+package mesh.shapes
 
-import mesh.shapes.{Face, Quadrilateral, Vertex}
+import mesh.DimensionOrder
 
 import scala.collection.mutable.ArrayBuffer
 

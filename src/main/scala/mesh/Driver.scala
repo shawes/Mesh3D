@@ -3,6 +3,7 @@ package mesh
 import java.io.File
 
 import mesh.io.{MeshCsvWriter, MeshReader}
+import mesh.quadrats.QuadratBuilder
 import mesh.shapes._
 
 object Driver {

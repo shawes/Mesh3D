@@ -1,4 +1,4 @@
-package mesh
+package mesh.quadrats
 
 import mesh.shapes.{Quadrilateral, Vertex}
 
@@ -40,6 +40,10 @@ class RectangleSubDivider(val widthRatio: Int, val lengthRatio: Int) {
     }
   }
 
+  private def calculateRatioPoint(start: Vertex, end: Vertex, a: Int, b: Int): Vertex = {
+    new Vertex((a * start.x + b * end.x) / (a + b), (a * start.y + b * end.y) / (a + b), 0)
+  }
+
   private def calculateInsidePoints(vertices: Array[Array[Vertex]]): Unit = {
     for (i <- 1 until lengthRatio) {
       for (j <- 1 until widthRatio) {
@@ -47,10 +51,6 @@ class RectangleSubDivider(val widthRatio: Int, val lengthRatio: Int) {
         vertices(j)(i) = vertex
       }
     }
-  }
-
-  private def calculateRatioPoint(start: Vertex, end: Vertex, a: Int, b: Int): Vertex = {
-    new Vertex((a * start.x + b * end.x) / (a + b), (a * start.y + b * end.y) / (a + b), 0)
   }
 
   private def calculateQuadrats(vertices: Array[Array[Vertex]]): List[Quadrilateral] = {

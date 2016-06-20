@@ -1,4 +1,4 @@
-package mesh
+package mesh.quadrats
 
 import mesh.shapes.{Line, Quadrat, Quadrilateral, Vertex}
 
