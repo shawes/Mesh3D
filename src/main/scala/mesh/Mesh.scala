@@ -3,7 +3,6 @@ package mesh
 import mesh.shapes.{Face, Quadrilateral, Vertex}
 
 import scala.collection.mutable.ArrayBuffer
-import scala.collection.parallel.ParSeq
 
 /**
   *
@@ -11,7 +10,7 @@ import scala.collection.parallel.ParSeq
   * @param values a tuple containing the (faces, vertices) as string objects
   * @param order  specifies the order of dimensions of the 3D mesh (width-length-height as XYZ)
   */
-class Mesh(val values: (String, String), val order: DimensionOrder) {
+class Mesh(val values: (Iterator[Char], Iterator[Char]), val order: DimensionOrder) {
 
   val vertices = constructVerticesList()
   val faces = constructFacesList()
@@ -32,8 +31,12 @@ class Mesh(val values: (String, String), val order: DimensionOrder) {
 
   private def getAreaOfFacesInPolygon(polygon: Quadrilateral, is3DArea: Boolean): Double = {
     var area = 0.0
-    for(face <- faces if polygon.contains(face.centroid)) {
-      if (is3DArea) area += face.area else area += face.area2D
+    val iterator = faces.iterator
+    while (iterator.hasNext) {
+      val face = iterator.next()
+      if (polygon.contains(face.centroid)) {
+        if (is3DArea) area += face.area else area += face.area2D
+      }
     }
     area
   }
@@ -42,88 +45,47 @@ class Mesh(val values: (String, String), val order: DimensionOrder) {
   Uses the constants X,Y,Z to determine the width and the length of the mesh as orientated
   in the mesh. It assumes the width is X, the length is Y and Z is the height.
    */
-  private def constructVerticesList() : ArrayBuffer[Vertex] = {
-    val verticesArray = values._2.split(" ").array
-    val verticesBuffer = new ArrayBuffer[Vertex]
-    for (i <- verticesArray.indices.by(3)) {
-      val vertex = new Vertex(verticesArray(i + order.getFirst).toDouble,
-        verticesArray(i + order.getSecond).toDouble,
-        verticesArray(i + order.getThird).toDouble)
-      verticesBuffer.append(vertex)
-    }
-    verticesBuffer
+
+
+  private def constructVerticesList(): ArrayBuffer[Vertex] = {
+    val iterator = values._2
+      val verticesBuffer = new ArrayBuffer[Vertex]
+    //println(iterator.next() + " "+ iterator.next() + " " + iterator.next())
+
+    while (iterator.hasNext) {
+      verticesBuffer += new Vertex(getNextNumber(iterator), getNextNumber(iterator), getNextNumber(iterator))
+      }
+    println("Constructed vertices, there were " + verticesBuffer.size)
+      verticesBuffer
   }
 
-  /*  private def constructVerticesList2() : ArrayBuffer[Vertex] = {
-      val iterator = values._2.iterator
-      val verticesBuffer = new ArrayBuffer[Vertex]
-      val number :StringBuilder = new StringBuilder()
-      while(iterator.hasNext) {
-        var character = iterator.next()
-        while (character != ' ' && iterator.hasNext) {
-          number + character
-          character = iterator.next()
-        }
-        var first, second, third : Double = 0
-        if(number.nonEmpty) {
-          if(number.contains('e')) {
-            first = 0
-          } else {
-            first = number.toString().toDouble
-          }
-        }
-        number.clear()
-        if(character == ' ' && iterator.hasNext) character = iterator.next()
+  private def getNextNumber(iterator: Iterator[Char]): Double = {
+    val numberString: StringBuilder = new StringBuilder()
 
-        character = iterator.next()
-        while (character != ' ' && iterator.hasNext) {
-          number + character
-          character = iterator.next()
-        }
-        if(number.nonEmpty) {
-          if(number.contains('e')) {
-            second = 0
-          } else {
-            second = number.toString().toDouble
-          }
-        }
-        number.clear()
-        if(character == ' ' && iterator.hasNext) character = iterator.next()
-
-
-        character = iterator.next()
-        while (character != ' ' && iterator.hasNext) {
-          number + character
-          character = iterator.next()
-        }
-        if(number.nonEmpty) {
-          if(number.contains('e')) {
-            third = 0
-          } else {
-            third = number.toString().toDouble
-          }
-        }
-        number.clear()
-        if(character == ' ' && iterator.hasNext) character = iterator.next()
-
-
-        val vertex = new Vertex(first,second,third)
-        println("created vertex "+vertex)
-        verticesBuffer.append(vertex)
-      }
-      verticesBuffer
-    }*/
-
-  private def constructFacesList(): ParSeq[Face] = {
-    val facesArray: Array[String] = values._1.split("-1")
-    val facesBuffer = new ArrayBuffer[Face]()
-    for(i <- facesArray.indices) {
-      val str:String = facesArray(i).trim
-      val verticesString = str.split(" ")
-      val face = new Face(vertices(verticesString(0).toInt), vertices(verticesString(1).toInt), vertices(verticesString(2).toInt))
-      facesBuffer.append(face)
+    while ((numberString.isEmpty || numberString.last != ' ') && iterator.hasNext) {
+      numberString + iterator.next()
     }
-    facesBuffer.toList.par
+    var number = 0.0
+    if (numberString.nonEmpty) {
+      try {
+        number = numberString.toString().trim.toDouble
+      } catch {
+        case e: java.lang.NumberFormatException => println("Can't parse this " + numberString.toString())
+      }
+    }
+    number
+  }
+
+  private def constructFacesList(): ArrayBuffer[Face] = {
+    val iterator = values._1
+    val facesBuffer = new ArrayBuffer[Face]()
+    while (iterator.hasNext) {
+      val face = new Face(vertices(getNextNumber(iterator).toInt), vertices(getNextNumber(iterator).toInt), vertices(getNextNumber(iterator).toInt))
+      facesBuffer += face
+      getNextNumber(iterator).toInt // This is the -1 separator
+    }
+    println("Constructed faces, there were " + facesBuffer.size)
+    facesBuffer
   }
 
   private def min_x(s1: Vertex, s2: Vertex): Vertex = if (s1.x < s2.x) s1 else s2

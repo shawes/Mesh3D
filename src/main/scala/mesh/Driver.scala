@@ -37,14 +37,17 @@ object Driver {
   def runMesh3D(): Unit = {
     val reader = new MeshReader()
     val geometry = new Geometry()
-    val files = input.value.toList.par
-    val passes = files.map(x => reader.read(x))
+    val files = input.value.toList
+    val passes = files.map(x => reader.readPull(x))
+    println("Completed reading in files")
+
     val meshes = passes.map(x => new Mesh(x, new DimensionOrder(dimensions.value.getOrElse("XYZ"))))
+    println("Created meshes")
+
     val boundingBox = geometry.findMaximumBoundingBox(meshes)
     println("Bounding box: " + boundingBox)
     val quadratBuilder = new QuadratBuilder
     val quadrats = quadratBuilder.build(boundingBox, quadratSize.value.get)
-
     println("There are this many quadrats: " + quadrats.size)
     val areas2d = meshes.map(x => x.getTwoDimensionAreas(quadrats))
     println("Calculated 2D areas")

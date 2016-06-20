@@ -33,7 +33,7 @@ class MeshCsvWriter {
     val f = new File(file)
     val writer = CSVWriter.open(f)
     writer.writeRow(List("quadrat size (m)", sizeOfQuadrat))
-    writer.writeRow(List("quadrat centroid", "dimension", names))
+    writer.writeRow(List("quadrat centroid", "dimension", names.flatten))
     writer.writeAll(areas3dTransposed)
     writer.writeAll(areas2dTransposed)
     writer.close()
@@ -53,6 +53,6 @@ class MeshCsvWriter {
   }
 
   private def getQuadratCentroidAsString(q: Quadrat): String = {
-    "(" + q.centroid.x + "," + q.centroid.y + ")"
+    "(" + q.midpoint.x + "," + q.midpoint.y + ")"
   }
 }

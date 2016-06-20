@@ -15,6 +15,7 @@ class Quadrilateral(val a: Vertex, val b: Vertex, val c: Vertex, val d: Vertex) 
   
   def contains(vertex: Vertex): Boolean = {
     rayCasting(vertex)
+    // inBoundingBox(vertex)
   }
 
   override def toString = vertices.toString
