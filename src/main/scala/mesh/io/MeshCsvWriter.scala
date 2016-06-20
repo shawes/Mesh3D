@@ -30,10 +30,9 @@ class MeshCsvWriter {
     // strip the file extension off the mesh names
     val names = files.map(x => x.getName.split('.')(0))
 
-    val f = new File(file)
-    val writer = CSVWriter.open(f)
+    val writer = CSVWriter.open(new File(file))
     writer.writeRow(List("quadrat size (m)", sizeOfQuadrat))
-    writer.writeRow(List("quadrat centroid", "dimension", names.flatten))
+    writer.writeRow(List("quadrat id", "quadrat centroid", "dimension", names))
     writer.writeAll(areas3dTransposed)
     writer.writeAll(areas2dTransposed)
     writer.close()

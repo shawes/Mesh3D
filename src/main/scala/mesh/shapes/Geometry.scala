@@ -25,14 +25,14 @@ class Geometry {
     new Vertex(oldPoint.x + distance / r, oldPoint.y + (distance * slope) / r, oldPoint.z)
   }
 
-  def findMaximumBoundingBox(meshList: List[Mesh]): Quadrilateral = {
+  def findMaximumBoundingBox(meshList: Seq[Mesh]): Quadrilateral = {
 
     val maxQuadrilateral = findMinimumBoundingBox(meshList)
     //createRectangle(maxQuadrilateral)
     maxQuadrilateral
   }
 
-  private def findMinimumBoundingBox(meshList: List[Mesh]): Quadrilateral = {
+  private def findMinimumBoundingBox(meshList: Seq[Mesh]): Quadrilateral = {
 
     val cornerLeftBottom = new Vertex(meshList.map(f => f.extremes._3).min,
       meshList.map(f => f.extremes._4).min,
