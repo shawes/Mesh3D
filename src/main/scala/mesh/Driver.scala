@@ -7,26 +7,13 @@ import mesh.shapes._
 
 object Driver {
 
-  // Setup the command line arguments
-  /*  val parser = new ArgotParser("mesh_quadrats", preUsage = Some("Mesh Quadrats, Author: Steven Hawes, Version 1.0"))
-    val quadratSize = parser.option[Double](List("quadrat_size"), "n", "The size of a quadrat (metres).")
-    val dimensions = parser.option[String](List("dimensions"), "WLH", "The dimensions of the input files (width-length-height)")
-    val output = parser.parameter[String]("outputfile", "Output file to which to write (a .csv)", optional = false)
-    val input = parser.multiParameter[File]("input", "Input .x3d files to read. If not specified, use stdin.", optional = true) {
-      (s, opt) =>
-        val file = new File(s)
-        if (!file.exists)
-          parser.usage("Input file \"" + s + "\" does not exist.")
-        file
-    }*/
-
   val parser = new scopt.OptionParser[Config]("mesh_quadrats") {
     head("mesh_quadrats", "1.0")
 
     opt[String]('d', "dim").required().action((x, c) =>
       c.copy(dim = x)).text("the dimensions of the input files WLH (width-length-height)")
 
-    opt[Double]('s', "size").required().action((x, c) =>
+    opt[Seq[Double]]('s', "size").required().action((x, c) =>
       c.copy(size = x)).text("the size of a quadrat (standard is metres, but depends on the mesh units)")
 
     opt[Unit]("verbose").action((_, c) =>
@@ -44,9 +31,7 @@ object Driver {
     parser.parse(args, Config()) match {
       case Some(config) =>
         runMesh3D(config)
-
       case None =>
-      // arguments are bad, error message will have been displayed
     }
   }
 
@@ -54,6 +39,7 @@ object Driver {
     val reader = new MeshReader()
     val geometry = new Geometry()
     val files = config.files
+
     val passes = files.map(x => reader.readPull(x))
     if (config.verbose) println("Finished reading in the mesh files")
 
@@ -62,25 +48,23 @@ object Driver {
 
     val boundingBox = geometry.findMaximumBoundingBox(meshes)
     if (config.verbose) println("Finished constructing the bounding box, with dimensions " + boundingBox)
-    val quadratBuilder = new QuadratBuilder
-    val quadrats = quadratBuilder.build(boundingBox, config.size)
-    if (config.verbose) println("Finished generating " + quadrats.size + " quadrats of size " + config.size _ + "m")
+
+    val quadratBuilder = new QuadratBuilder()
+    val quadrats = config.size.map(size => quadratBuilder.build(boundingBox, size))
+    if (config.verbose) {
+      println("Finished generating quadrats of sizes " + config.size.mkString(", ") + " of which there were ")
+      quadrats.foreach(quadrat => print(quadrat.size + ","))
+      println(" respectively.")
+    }
+
+
     val areas2d = meshes.map(x => x.getTwoDimensionAreas(quadrats))
-    println("Calculated 2D areas")
     val areas3d = meshes.map(x => x.getThreeDimensionAreas(quadrats))
-    println("Calculated 3D areas")
+    if (config.verbose) println("Finished calculating the 2D and 3D areas of the quadrats")
+
     val writer = new MeshCsvWriter()
-    writer.write(config.out, files.toList, quadrats, config.size, areas3d.toList, areas2d.toList)
-  }
-
-  def printArea(mesh: Mesh, polygons: List[Quadrilateral]): Unit = {
-    println("--Mesh started--")
-    println("Area = " + mesh.getTotalArea(polygons))
-    println("--Mesh finished--")
-  }
-
-  def getUniqueQuadrats(quadrats: List[Quadrat]): List[Quadrat] = {
-    quadrats
+    writer.write(config.out, files.toList, quadrats, config.size.toList, areas3d, areas2d)
+    if (config.verbose) println("Finished writing to " + config.out)
   }
 
 

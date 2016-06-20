@@ -18,15 +18,11 @@ class Mesh(val values: (Iterator[Char], Iterator[Char]), val order: DimensionOrd
     vertices.reduceLeft(max_y).y, vertices.reduceLeft(min_x).x, vertices.reduceLeft(min_y).y)
 
   def getTotalArea(polygons: List[Quadrilateral]): Double = {
-    getThreeDimensionAreas(polygons).sum
+    getThreeDimensionAreas(Seq(polygons)).head.sum
   }
 
-  def getThreeDimensionAreas(polygons: List[Quadrilateral]): List[Double] = {
-    polygons.map(x => getAreaOfFacesInPolygon(x, is3DArea = true))
-  }
-
-  def getTwoDimensionAreas(polygons: List[Quadrilateral]): List[Double] = {
-    polygons.map(x => getAreaOfFacesInPolygon(x, is3DArea = false))
+  def getThreeDimensionAreas(quadratsList: Seq[List[Quadrilateral]]): Seq[List[Double]] = {
+    quadratsList.map(quadrats => quadrats.map(quadrat => getAreaOfFacesInPolygon(quadrat, is3DArea = true)))
   }
 
   private def getAreaOfFacesInPolygon(polygon: Quadrilateral, is3DArea: Boolean): Double = {
@@ -41,11 +37,14 @@ class Mesh(val values: (Iterator[Char], Iterator[Char]), val order: DimensionOrd
     area
   }
 
+  def getTwoDimensionAreas(quadratsList: Seq[List[Quadrilateral]]): Seq[List[Double]] = {
+    quadratsList.map(quadrats => quadrats.map(quadrat => getAreaOfFacesInPolygon(quadrat, is3DArea = false)))
+  }
+
   /*
   Uses the constants X,Y,Z to determine the width and the length of the mesh as orientated
   in the mesh. It assumes the width is X, the length is Y and Z is the height.
    */
-
 
   private def constructVerticesList(): ArrayBuffer[Vertex] = {
     val iterator = values._2

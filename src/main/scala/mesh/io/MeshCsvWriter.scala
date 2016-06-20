@@ -5,7 +5,6 @@ import java.io.File
 import com.github.tototoshi.csv.CSVWriter
 import mesh.shapes.Quadrat
 
-import scala.collection.AbstractSeq
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -15,28 +14,37 @@ import scala.collection.mutable.ArrayBuffer
 class MeshCsvWriter {
   def write(file: String,
             files: List[File],
-            quadrats: List[Quadrat],
-            sizeOfQuadrat: Double,
-            areas3d: List[AbstractSeq[Any] with java.io.Serializable],
-            areas2d: List[AbstractSeq[Any] with java.io.Serializable]): Unit = {
-
-    val quadratIds: List[String] = getQuadratIds(quadrats)
-    val quadratCentroids: List[String] = getQuadratCoordinates(quadrats)
-    val three_list = List.fill(quadratCentroids.size)("3")
-    val two_list = List.fill(quadratCentroids.size)("2")
-    val areas3dTransposed = (quadratIds :: quadratCentroids :: three_list :: areas3d).transpose
-    val areas2dTransposed = (quadratIds :: quadratCentroids :: two_list :: areas2d).transpose
+            quadrats: Seq[List[Quadrat]],
+            sizeOfQuadrat: List[Double],
+            areas3d: Seq[Seq[List[Double]]],
+            areas2d: Seq[Seq[List[Double]]]): Unit = {
 
     // strip the file extension off the mesh names
     val names = files.map(x => x.getName.split('.')(0))
 
     val writer = CSVWriter.open(new File(file))
-    writer.writeRow(List("quadrat size (m)", sizeOfQuadrat))
-    writer.writeRow(List("quadrat id", "quadrat centroid", "dimension", names))
-    writer.writeAll(areas3dTransposed)
-    writer.writeAll(areas2dTransposed)
-    writer.close()
 
+    // headers
+    writer.writeRow(List("mesh_name", "quadrat_size", "quadrat_id", "quadrat_centroid", "area_dimension", "area_value"))
+
+    val areas3dArray = areas3d.flatten.toArray.flatten
+    val areas2dArray = areas2d.flatten.toArray.flatten
+    val sizes = sizeOfQuadrat.toArray
+
+    var areaIndex = 0
+    var sizeIndex = 0
+    names.foreach(name => {
+      quadrats.foreach(quadrat => {
+        quadrat.foreach(q => {
+          writer.writeRow(List(name, sizes(sizeIndex), q.id, getQuadratCentroidAsString(q), "3D", areas3dArray(areaIndex)))
+          writer.writeRow(List(name, sizes(sizeIndex), q.id, getQuadratCentroidAsString(q), "2D", areas2dArray(areaIndex)))
+          areaIndex = areaIndex + 1
+        })
+        sizeIndex = sizeIndex + 1
+      })
+      sizeIndex = 0
+    })
+    writer.close()
   }
 
   private def getQuadratIds(quadrats: List[Quadrat]): List[String] = {

@@ -14,13 +14,14 @@ class Quadrat(val id: (Int, Int), val size: Double, val midpoint: Vertex) extend
 
 
   override def equals(that: Any): Boolean = that match {
-    case that: Quadrat => that.midpoint.equals(this.midpoint)
+    case that: Quadrat => that.midpoint.equals(this.midpoint) && (that.id._1 == this.id._1 && that.id._2 == this.id._2) && that.size == this.size
     case _ => false
   }
 
   override def hashCode: Int = {
     val prime = 31
     var result = 1
+    result = prime * result + id.hashCode
     result = prime * result + size.hashCode
     result = prime * result + (if (midpoint == null) 0 else midpoint.hashCode)
     result

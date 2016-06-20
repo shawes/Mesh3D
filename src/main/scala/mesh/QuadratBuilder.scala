@@ -19,7 +19,7 @@ class QuadratBuilder {
 
     val centroid = box.centroid
     val quadrats = new ListBuffer[Quadrat]()
-    quadrats += new Quadrat((0, 0), size, centroid)
+    //quadrats += new Quadrat((0, 0), size, centroid)
 
     //println("centroid is " + centroid)
 
@@ -30,16 +30,20 @@ class QuadratBuilder {
 
     for (i <- 0 until (distanceToEdgeCD / size).toInt + 1) {
       for (j <- 0 until (distanceToEdgeAD / size).toInt + 1) {
-        val fourNewQuadrats =
-          List(new Quadrat((i, j), size, new Vertex(centroid.x + i * size, centroid.y + (j * size), centroid.z)),
-            new Quadrat((i, j), size, new Vertex(centroid.x + (i * size), centroid.y - (j * size), centroid.z)),
-            new Quadrat((i, j), size, new Vertex(centroid.x - (i * size), centroid.y + (j * size), centroid.z)),
-            new Quadrat((i, j), size, new Vertex(centroid.x - (i * size), centroid.y - (j * size), centroid.z)))
-        val quadratsCentroidInsideBoundingBox = fourNewQuadrats.filter(q => box.contains(q.midpoint))
-        quadrats ++= quadratsCentroidInsideBoundingBox
+        if (i == 0 && j == 0) quadrats += new Quadrat((0, 0), size, centroid)
+        else {
+          val fourNewQuadrats =
+            List(new Quadrat((i, j), size, new Vertex(centroid.x + i * size, centroid.y + (j * size), centroid.z)),
+              new Quadrat((i, j * (-1)), size, new Vertex(centroid.x + (i * size), centroid.y - (j * size), centroid.z)),
+              new Quadrat((i * (-1), j), size, new Vertex(centroid.x - (i * size), centroid.y + (j * size), centroid.z)),
+              new Quadrat((i * (-1), j * (-1)), size, new Vertex(centroid.x - (i * size), centroid.y - (j * size), centroid.z)))
+
+          val quadratsCentroidInsideBoundingBox = fourNewQuadrats.filter(q => box.contains(q.midpoint))
+          quadrats ++= quadratsCentroidInsideBoundingBox
+        }
       }
     }
-    quadrats.toList.distinct
+    quadrats.distinct.toList
   }
 
 }
