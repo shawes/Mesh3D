@@ -10,7 +10,7 @@ object Driver {
   val parser = new scopt.OptionParser[Config]("mesh_quadrats") {
     head("mesh_quadrats", "1.0")
 
-    opt[String]('d', "dim").required().action((x, c) =>
+    opt[String]('d', "dim").optional().action((x, c) =>
       c.copy(dim = x)).text("the dimensions of the input files WLH (width-length-height)")
 
     opt[Seq[Double]]('s', "size").required().action((x, c) =>

@@ -15,24 +15,15 @@ you can install it here: http://www.oracle.com/technetwork/java/javase/downloads
 The command line usage for this application is specified as:
 
 ```
-Usage: java -Xmx1024m -jar meshquadrats [OPTIONS] outputfile [input] ...
+mesh_quadrats 1.0
+Usage: java -Xmx4096m -jar mesh_quadrats [options] <file>...
 
-OPTIONS
-
---length n  The number to subdivide the rectangular mesh's length.
-
---width n   The number to subdivide the rectangular mesh's width.
-
---dim XYZ   The order of the axis (it assumes XYZ)
-
-
-PARAMETERS
-
-outputfile  Output file to which to write (a .csv)
-
-input       Input .x3d files to read. If not specified, use stdin. (May be
-            specified multiple times.)
-            
+  -d, --dim <value>   the dimensions of the input files WLH (width-length-height)
+  -s, --size <value>  the size of a quadrat (standard is metres, but depends on the mesh units)
+  --verbose           verbose is a flag
+  -o, --out <value>   output file to which to write (it has to be a .csv file)
+  <file>...           input .x3d files to calcuate quadrats for
+        
 ```
 
 ## What does it do?
