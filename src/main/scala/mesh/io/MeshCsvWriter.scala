@@ -34,8 +34,11 @@ class MeshCsvWriter {
     names.foreach(name => {
       quadrats.foreach(quadrat => {
         quadrat.foreach(q => {
-          writer.writeRow(List(name, sizes(sizeIndex), q.id, getQuadratCentroidAsString(q), "3D", areas3dArray(areaIndex)))
-          writer.writeRow(List(name, sizes(sizeIndex), q.id, getQuadratCentroidAsString(q), "2D", areas2dArray(areaIndex)))
+          val area3d = areas3dArray(areaIndex)
+          if (area3d > 0) {
+            writer.writeRow(List(name, sizes(sizeIndex), q.id, getQuadratCentroidAsString(q), "3D", area3d))
+            writer.writeRow(List(name, sizes(sizeIndex), q.id, getQuadratCentroidAsString(q), "2D", areas2dArray(areaIndex)))
+          }
           areaIndex = areaIndex + 1
         })
         sizeIndex = sizeIndex + 1
