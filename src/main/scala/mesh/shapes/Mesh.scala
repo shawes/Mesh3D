@@ -25,6 +25,10 @@ class Mesh(val values: (Iterator[Char], Iterator[Char]), val order: DimensionOrd
     quadratsList.map(quadrats => quadrats.map(quadrat => getAreaOfFacesInPolygon(quadrat, is3DArea = true)))
   }
 
+  def getTwoDimensionAreas(quadratsList: Seq[List[Quadrilateral]]): Seq[List[Double]] = {
+    quadratsList.map(quadrats => quadrats.map(quadrat => getAreaOfFacesInPolygon(quadrat, is3DArea = false)))
+  }
+
   private def getAreaOfFacesInPolygon(polygon: Quadrilateral, is3DArea: Boolean): Double = {
     var area = 0.0
     val iterator = faces.iterator
@@ -37,10 +41,6 @@ class Mesh(val values: (Iterator[Char], Iterator[Char]), val order: DimensionOrd
     area
   }
 
-  def getTwoDimensionAreas(quadratsList: Seq[List[Quadrilateral]]): Seq[List[Double]] = {
-    quadratsList.map(quadrats => quadrats.map(quadrat => getAreaOfFacesInPolygon(quadrat, is3DArea = false)))
-  }
-
   /*
   Uses the constants X,Y,Z to determine the width and the length of the mesh as orientated
   in the mesh. It assumes the width is X, the length is Y and Z is the height.
@@ -48,14 +48,38 @@ class Mesh(val values: (Iterator[Char], Iterator[Char]), val order: DimensionOrd
 
   private def constructVerticesList(): ArrayBuffer[Vertex] = {
     val iterator = values._2
-      val verticesBuffer = new ArrayBuffer[Vertex]
-    //println(iterator.next() + " "+ iterator.next() + " " + iterator.next())
+    val verticesBuffer = new ArrayBuffer[Vertex]
 
     while (iterator.hasNext) {
-      verticesBuffer += new Vertex(getNextNumber(iterator), getNextNumber(iterator), getNextNumber(iterator))
+      val x = getNextNumber(iterator)
+      val y = getNextNumber(iterator)
+      val z = getNextNumber(iterator)
+
+      verticesBuffer += getVertexInDimensionOrder(x, y, z)
+
       }
     println("Constructed vertices, there were " + verticesBuffer.size)
       verticesBuffer
+  }
+
+  private def getVertexInDimensionOrder(x: Double, y: Double, z: Double): Vertex = {
+    order.getThird match {
+      case 0 => new Vertex(z, y, x)
+      case 1 => new Vertex(x, z, y)
+      case _ => new Vertex(x, y, z)
+    }
+  }
+
+  private def constructFacesList(): ArrayBuffer[Face] = {
+    val iterator = values._1
+    val facesBuffer = new ArrayBuffer[Face]()
+    while (iterator.hasNext) {
+      val face = new Face(vertices(getNextNumber(iterator).toInt), vertices(getNextNumber(iterator).toInt), vertices(getNextNumber(iterator).toInt))
+      facesBuffer += face
+      getNextNumber(iterator).toInt // This is the -1 separator
+    }
+    println("Constructed faces, there were " + facesBuffer.size)
+    facesBuffer
   }
 
   private def getNextNumber(iterator: Iterator[Char]): Double = {
@@ -73,18 +97,6 @@ class Mesh(val values: (Iterator[Char], Iterator[Char]), val order: DimensionOrd
       }
     }
     number
-  }
-
-  private def constructFacesList(): ArrayBuffer[Face] = {
-    val iterator = values._1
-    val facesBuffer = new ArrayBuffer[Face]()
-    while (iterator.hasNext) {
-      val face = new Face(vertices(getNextNumber(iterator).toInt), vertices(getNextNumber(iterator).toInt), vertices(getNextNumber(iterator).toInt))
-      facesBuffer += face
-      getNextNumber(iterator).toInt // This is the -1 separator
-    }
-    println("Constructed faces, there were " + facesBuffer.size)
-    facesBuffer
   }
 
   private def min_x(s1: Vertex, s2: Vertex): Vertex = if (s1.x < s2.x) s1 else s2

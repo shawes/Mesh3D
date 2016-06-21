@@ -35,7 +35,7 @@ object Driver {
         val startTime = Calendar.getInstance.getTimeInMillis
         runMesh3D(config)
         val finishTime = Calendar.getInstance.getTimeInMillis
-        println("Completed mesh quadrats in {0} seconds", (finishTime - startTime) / 1000)
+        println("Completed mesh quadrats in " + (finishTime - startTime) / 1000 + " seconds")
       case None =>
     }
   }
@@ -61,7 +61,6 @@ object Driver {
       quadrats.foreach(quadrat => print(quadrat.size + ","))
       println(" respectively.")
     }
-
 
     val areas2d = meshes.map(x => x.getTwoDimensionAreas(quadrats))
     val areas3d = meshes.map(x => x.getThreeDimensionAreas(quadrats))
