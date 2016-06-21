@@ -17,28 +17,26 @@ class Mesh(val values: (Iterator[Char], Iterator[Char]), val order: DimensionOrd
   val extremes = Tuple4(vertices.reduceLeft(max_x).x,
     vertices.reduceLeft(max_y).y, vertices.reduceLeft(min_x).x, vertices.reduceLeft(min_y).y)
 
-  def getTotalArea(polygons: List[Quadrilateral]): Double = {
-    getThreeDimensionAreas(Seq(polygons)).head.sum
-  }
-
-  def getThreeDimensionAreas(quadratsList: Seq[List[Quadrilateral]]): Seq[List[Double]] = {
+  def getThreeDimensionAreas(quadratsList: Seq[List[Quadrilateral]]): Seq[List[(Double, Int)]] = {
     quadratsList.map(quadrats => quadrats.map(quadrat => getAreaOfFacesInPolygon(quadrat, is3DArea = true)))
   }
 
-  def getTwoDimensionAreas(quadratsList: Seq[List[Quadrilateral]]): Seq[List[Double]] = {
+  def getTwoDimensionAreas(quadratsList: Seq[List[Quadrilateral]]): Seq[List[(Double, Int)]] = {
     quadratsList.map(quadrats => quadrats.map(quadrat => getAreaOfFacesInPolygon(quadrat, is3DArea = false)))
   }
 
-  private def getAreaOfFacesInPolygon(polygon: Quadrilateral, is3DArea: Boolean): Double = {
+  private def getAreaOfFacesInPolygon(polygon: Quadrilateral, is3DArea: Boolean): (Double, Int) = {
     var area = 0.0
+    var facesCount = 0
     val iterator = faces.iterator
     while (iterator.hasNext) {
       val face = iterator.next()
       if (polygon.contains(face.centroid)) {
-        if (is3DArea) area += face.area else area += face.area2D
+        facesCount = facesCount + 1
+        if (is3DArea) area = area + face.area3D else area = area + face.area2D
       }
     }
-    area
+    (area, facesCount)
   }
 
   /*
