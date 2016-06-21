@@ -25,7 +25,6 @@ class MeshReader() {
         case _ => ()
       }
     }
-    println("Finished getting here, there were (vertcies,faces)" + vertices.size + " " + faces.size)
     new Tuple2(faces.head.text.iterator, vertices.head.text.iterator)
   }
 

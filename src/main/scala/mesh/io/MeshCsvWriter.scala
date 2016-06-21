@@ -7,10 +7,6 @@ import mesh.shapes.Quadrat
 
 import scala.collection.mutable.ArrayBuffer
 
-/**
-  *
-  * Created by Steven Hawes on 7/06/16.
-  */
 class MeshCsvWriter {
   def write(file: String,
             files: List[File],

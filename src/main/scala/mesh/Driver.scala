@@ -1,6 +1,7 @@
 package mesh
 
 import java.io.File
+import java.util.Calendar
 
 import mesh.io.{MeshCsvWriter, MeshReader}
 import mesh.quadrats.QuadratBuilder
@@ -31,7 +32,10 @@ object Driver {
   def main(args: Array[String]) {
     parser.parse(args, Config()) match {
       case Some(config) =>
+        val startTime = Calendar.getInstance.getTimeInMillis
         runMesh3D(config)
+        val finishTime = Calendar.getInstance.getTimeInMillis
+        println("Completed mesh quadrats in {0} seconds", (finishTime - startTime) / 1000)
       case None =>
     }
   }
