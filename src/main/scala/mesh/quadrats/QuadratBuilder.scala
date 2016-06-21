@@ -23,8 +23,8 @@ class QuadratBuilder {
 
     //println("centroid is " + centroid)
 
-    val distanceToEdgeAD = centroid.distanceTo(new Line(box.d, box.a).midpoint)
-    val distanceToEdgeCD = centroid.distanceTo(new Line(box.c, box.d).midpoint)
+    val distanceToEdgeAD = centroid.distanceToXYZ(new Line(box.d, box.a).midpoint)
+    val distanceToEdgeCD = centroid.distanceToXYZ(new Line(box.c, box.d).midpoint)
 
     //println("dist right=" + distanceToEdgeAD + ", dist down =" + distanceToEdgeCD)
 

@@ -48,7 +48,7 @@ object Driver {
     val passes = files.map(x => reader.readPull(x))
     if (config.verbose) println("Finished reading in the mesh files")
 
-    val meshes = passes.map(x => new Mesh(x, new DimensionOrder(config.dim)))
+    val meshes = passes.map(x => new Mesh(x, new DimensionOrder(config.dim))).par
     if (config.verbose) println("Finished constructing the vertices and faces")
 
     val boundingBox = geometry.findMaximumBoundingBox(meshes)

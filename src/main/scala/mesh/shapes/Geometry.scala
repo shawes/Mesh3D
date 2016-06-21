@@ -1,5 +1,6 @@
 package mesh.shapes
 
+import scala.collection.parallel.ParSeq
 import scala.math.atan2
 
 class Geometry {
@@ -23,14 +24,14 @@ class Geometry {
     new Vertex(oldPoint.x + distance / r, oldPoint.y + (distance * slope) / r, oldPoint.z)
   }
 
-  def findMaximumBoundingBox(meshList: Seq[Mesh]): Quadrilateral = {
+  def findMaximumBoundingBox(meshList: ParSeq[Mesh]): Quadrilateral = {
 
     val maxQuadrilateral = findMinimumBoundingBox(meshList)
     //createRectangle(maxQuadrilateral)
     maxQuadrilateral
   }
 
-  private def findMinimumBoundingBox(meshList: Seq[Mesh]): Quadrilateral = {
+  private def findMinimumBoundingBox(meshList: ParSeq[Mesh]): Quadrilateral = {
 
     val cornerLeftBottom = new Vertex(meshList.map(f => f.extremes._3).min,
       meshList.map(f => f.extremes._4).min,

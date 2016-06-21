@@ -6,14 +6,15 @@ import com.github.tototoshi.csv.CSVWriter
 import mesh.shapes.Quadrat
 
 import scala.collection.mutable.ArrayBuffer
+import scala.collection.parallel.ParSeq
 
 class MeshCsvWriter {
   def write(file: String,
             files: List[File],
             quadrats: Seq[List[Quadrat]],
             sizeOfQuadrat: List[Double],
-            areas3d: Seq[Seq[List[Double]]],
-            areas2d: Seq[Seq[List[Double]]]): Unit = {
+            areas3d: ParSeq[Seq[List[Double]]],
+            areas2d: ParSeq[Seq[List[Double]]]): Unit = {
 
     // strip the file extension off the mesh names
     val names = files.map(x => x.getName.split('.')(0))
