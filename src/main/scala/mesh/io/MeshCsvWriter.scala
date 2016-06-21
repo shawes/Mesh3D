@@ -22,10 +22,12 @@ class MeshCsvWriter {
     // strip the file extension off the mesh names
     val names = files.map(x => x.getName.split('.')(0))
 
-    val writer = CSVWriter.open(new File(file))
+    val csvFile = new File(file)
+    val exists: Boolean = csvFile.isFile
+    val writer = CSVWriter.open(new File(file), append = exists)
 
     // headers
-    writer.writeRow(List("mesh_name", "quadrat_size", "quadrat_id", "quadrat_centroid", "area_dimension", "area_value"))
+    if (!exists) writer.writeRow(List("mesh_name", "quadrat_size", "quadrat_id", "quadrat_centroid", "area_dimension", "area_value"))
 
     val areas3dArray = areas3d.flatten.toArray.flatten
     val areas2dArray = areas2d.flatten.toArray.flatten
