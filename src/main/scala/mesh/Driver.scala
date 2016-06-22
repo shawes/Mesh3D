@@ -68,12 +68,11 @@ object Driver {
       print(" respectively.\n")
     }
 
-    val areas2d = meshes.map(x => x.getTwoDimensionAreas(quadrats))
-    val areas3d = meshes.map(x => x.getThreeDimensionAreas(quadrats))
+    val areas = meshes.map(x => x.getArea(quadrats))
     if (config.verbose) println("Finished calculating the 2D and 3D areas of the quadrats")
 
     val writer = new MeshCsvWriter()
-    writer.write(config.out, files.toList, quadrats, config.size.toList, areas3d, areas2d)
+    writer.write(config.out, files.toList, quadrats, config.size.toList, areas)
     if (config.verbose) println("Finished writing to " + config.out)
   }
 
