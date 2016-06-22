@@ -48,18 +48,24 @@ object Driver {
     val passes = files.map(x => reader.readPull(x))
     if (config.verbose) println("Finished reading in the mesh files")
 
-    val meshes = passes.map(x => new Mesh(x, new DimensionOrder(config.dim)))
+    val meshes = passes.map(x => new Mesh(x, new DimensionOrder(config.dim), config.verbose))
     if (config.verbose) println("Finished constructing the vertices and faces")
 
     val boundingBox = geometry.findMaximumBoundingBox(meshes)
-    if (config.verbose) println("Finished constructing the bounding box, with dimensions " + boundingBox)
+    if (config.verbose) {
+      println("Finished constructing the bounding box:")
+      println("A: " + boundingBox.a)
+      println("B: " + boundingBox.b)
+      println("C: " + boundingBox.c)
+      println("D: " + boundingBox.d)
+    }
 
     val quadratBuilder = new QuadratBuilder()
     val quadrats = config.size.map(size => quadratBuilder.build(boundingBox, size))
     if (config.verbose) {
-      println("Finished generating quadrats of sizes " + config.size.mkString(", ") + " of which there were ")
-      quadrats.foreach(quadrat => print(quadrat.size + ","))
-      println(" respectively.")
+      print("Finished generating quadrats of sizes " + config.size.mkString(",") + " of which there were ")
+      quadrats.foreach(quadrat => if (quadrats.head == quadrat) print(quadrat.size) else print("," + quadrat.size))
+      print(" respectively.\n")
     }
 
     val areas2d = meshes.map(x => x.getTwoDimensionAreas(quadrats))

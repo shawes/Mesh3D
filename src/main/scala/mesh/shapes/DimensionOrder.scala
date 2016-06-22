@@ -1,4 +1,4 @@
-package mesh
+package mesh.shapes
 
 class DimensionOrder(val order: String) {
   val X = 0
@@ -9,12 +9,12 @@ class DimensionOrder(val order: String) {
 
   def getSecond: Int = getValue(order.charAt(1))
 
+  def getThird: Int = getValue(order.charAt(2))
+
   private def getValue(c: Char): Int = {
     if (c == 'X') X
     else if (c == 'Y') Y
     else Z
   }
-
-  def getThird: Int = getValue(order.charAt(2))
 
 }

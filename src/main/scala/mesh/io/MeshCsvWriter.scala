@@ -24,7 +24,7 @@ class MeshCsvWriter {
     val writer = CSVWriter.open(new File(file), append = exists)
 
     // headers
-    if (!exists) writer.writeRow(List("mesh_name", "quadrat_size_m", "quadrat_coord_x", "quadrat_coord_y", "quadrat_centroid_x", "quadrat_centroid_y", "faces", "3d_area", "2d_area", "rugosity"))
+    if (!exists) writer.writeRow(List("mesh_name", "quadrat_size_m", "quadrat_coord_x", "quadrat_coord_y", "quadrat_centroid_x", "quadrat_centroid_y", "quadrat_centroid_z", "faces", "3d_area", "2d_area", "rugosity"))
 
     val areas3dArray = areas3d.flatten.toArray.flatten
     val areas2dArray = areas2d.flatten.toArray.flatten
@@ -40,7 +40,7 @@ class MeshCsvWriter {
           val faces = areas3dArray(areaIndex)._2
           val rugosity = area3d / area2d
           if (area3d > 0 && area2d > 0) {
-            writer.writeRow(List(name, sizes(sizeIndex), q.id._1, q.id._2, q.midpoint.x, q.midpoint.y, faces, area3d, area2d, rugosity))
+            writer.writeRow(List(name, sizes(sizeIndex), q.id._1, q.id._2, q.midpoint.x, q.midpoint.y, q.midpoint.z, faces, area3d, area2d, rugosity))
           }
           areaIndex = areaIndex + 1
         })

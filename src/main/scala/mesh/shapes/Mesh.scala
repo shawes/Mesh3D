@@ -1,7 +1,5 @@
 package mesh.shapes
 
-import mesh.DimensionOrder
-
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -10,7 +8,7 @@ import scala.collection.mutable.ArrayBuffer
   * @param values a tuple containing the (faces, vertices) as string objects
   * @param order  specifies the order of dimensions of the 3D mesh (width-length-height as XYZ)
   */
-class Mesh(val values: (Iterator[Char], Iterator[Char]), val order: DimensionOrder) {
+class Mesh(val values: (Iterator[Char], Iterator[Char]), val order: DimensionOrder, val verbose: Boolean) {
 
   val vertices = constructVerticesList()
   val faces = constructFacesList()
@@ -19,10 +17,6 @@ class Mesh(val values: (Iterator[Char], Iterator[Char]), val order: DimensionOrd
 
   def getThreeDimensionAreas(quadratsList: Seq[List[Quadrilateral]]): Seq[List[(Double, Int)]] = {
     quadratsList.map(quadrats => quadrats.map(quadrat => getAreaOfFacesInPolygon(quadrat, is3DArea = true)))
-  }
-
-  def getTwoDimensionAreas(quadratsList: Seq[List[Quadrilateral]]): Seq[List[(Double, Int)]] = {
-    quadratsList.map(quadrats => quadrats.map(quadrat => getAreaOfFacesInPolygon(quadrat, is3DArea = false)))
   }
 
   private def getAreaOfFacesInPolygon(polygon: Quadrilateral, is3DArea: Boolean): (Double, Int) = {
@@ -37,6 +31,10 @@ class Mesh(val values: (Iterator[Char], Iterator[Char]), val order: DimensionOrd
       }
     }
     (area, facesCount)
+  }
+
+  def getTwoDimensionAreas(quadratsList: Seq[List[Quadrilateral]]): Seq[List[(Double, Int)]] = {
+    quadratsList.map(quadrats => quadrats.map(quadrat => getAreaOfFacesInPolygon(quadrat, is3DArea = false)))
   }
 
   /*
@@ -56,7 +54,7 @@ class Mesh(val values: (Iterator[Char], Iterator[Char]), val order: DimensionOrd
       verticesBuffer += getVertexInDimensionOrder(x, y, z)
 
       }
-    println("Constructed vertices, there were " + verticesBuffer.size)
+    if (verbose) println("Constructed vertices, there were " + verticesBuffer.size)
       verticesBuffer
   }
 
@@ -76,7 +74,7 @@ class Mesh(val values: (Iterator[Char], Iterator[Char]), val order: DimensionOrd
       facesBuffer += face
       getNextNumber(iterator).toInt // This is the -1 separator
     }
-    println("Constructed faces, there were " + facesBuffer.size)
+    if (verbose) println("Constructed faces, there were " + facesBuffer.size)
     facesBuffer
   }
 
