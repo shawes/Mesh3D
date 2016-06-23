@@ -1,6 +1,10 @@
 package mesh.shapes
 
+import grizzled.math.stats._
+
+import scala.Numeric._
 import scala.collection.mutable.ArrayBuffer
+
 
 /**
   *
@@ -15,22 +19,32 @@ class Mesh(val values: (Iterator[Char], Iterator[Char]), val order: DimensionOrd
   val extremes = Tuple4(vertices.reduceLeft(max_x).x,
     vertices.reduceLeft(max_y).y, vertices.reduceLeft(min_x).x, vertices.reduceLeft(min_y).y)
 
-  def getArea(quadratsList: Seq[List[Quadrilateral]]): Seq[List[(Double, Double, Int)]] = {
-    quadratsList.map(quadrats => quadrats.map(quadrat => getAreaOfFacesInPolygon(quadrat, is3DArea = true)))
+  def getArea(quadratsList: Seq[List[Quadrat]]): Seq[List[(Double, Double, Int, Int)]] = {
+    quadratsList.map(quadrats => quadrats.map(quadrat => getAreaOfFacesInPolygon(quadrat)))
   }
 
-  private def getAreaOfFacesInPolygon(polygon: Quadrilateral, is3DArea: Boolean): (Double, Double, Int) = {
+  private def getAreaOfFacesInPolygon(quadrat: Quadrat): (Double, Double, Int, Int) = {
     var area3d, area2d = 0.0
     var facesCount = 0
+    val vertices = new ArrayBuffer[Vertex]()
     val iterator = faces.iterator
     while (iterator.hasNext) {
       val face = iterator.next()
-      if (polygon.contains(face.centroid)) {
-        facesCount = facesCount + 1
-        if (is3DArea) area3d = area3d + face.area3D else area2d = area2d + face.area2D
+      if (quadrat.contains(face.centroid)) {
+        facesCount += 1
+        area3d += face.area3D
+        area2d += face.area2D
+
+        vertices += face.v1
+        vertices += face.v2
+        vertices += face.v3
       }
     }
-    (area3d, area2d, facesCount)
+    val valuesOfZ = vertices.map(v => v.z)
+    quadrat.relativeZAvg = arithmeticMean(valuesOfZ: _*)
+    quadrat.relativeZStd = populationStandardDeviation(valuesOfZ: _*)
+
+    (area3d, area2d, facesCount, vertices.distinct.size)
   }
 
   /*
@@ -62,18 +76,6 @@ class Mesh(val values: (Iterator[Char], Iterator[Char]), val order: DimensionOrd
     }
   }
 
-  private def constructFacesList(): ArrayBuffer[Face] = {
-    val iterator = values._1
-    val facesBuffer = new ArrayBuffer[Face]()
-    while (iterator.hasNext) {
-      val face = new Face(vertices(getNextNumber(iterator).toInt), vertices(getNextNumber(iterator).toInt), vertices(getNextNumber(iterator).toInt))
-      facesBuffer += face
-      getNextNumber(iterator).toInt // This is the -1 separator
-    }
-    if (verbose) println("Constructed faces, there were " + facesBuffer.size)
-    facesBuffer
-  }
-
   private def getNextNumber(iterator: Iterator[Char]): Double = {
     val numberString: StringBuilder = new StringBuilder()
 
@@ -89,6 +91,18 @@ class Mesh(val values: (Iterator[Char], Iterator[Char]), val order: DimensionOrd
       }
     }
     number
+  }
+
+  private def constructFacesList(): ArrayBuffer[Face] = {
+    val iterator = values._1
+    val facesBuffer = new ArrayBuffer[Face]()
+    while (iterator.hasNext) {
+      val face = new Face(vertices(getNextNumber(iterator).toInt), vertices(getNextNumber(iterator).toInt), vertices(getNextNumber(iterator).toInt))
+      facesBuffer += face
+      getNextNumber(iterator).toInt // This is the -1 separator
+    }
+    if (verbose) println("Constructed faces, there were " + facesBuffer.size)
+    facesBuffer
   }
 
   private def min_x(s1: Vertex, s2: Vertex): Vertex = if (s1.x < s2.x) s1 else s2

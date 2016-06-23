@@ -13,7 +13,7 @@ class MeshCsvWriter {
             files: List[File],
             quadrats: Seq[List[Quadrat]],
             sizeOfQuadrat: List[Double],
-            areas: ParSeq[Seq[List[(Double, Double, Int)]]]): Unit = {
+            areas: ParSeq[Seq[List[(Double, Double, Int, Int)]]]): Unit = {
 
     // strip the file extension off the mesh names
     val names = files.map(x => x.getName.split('.')(0))
@@ -23,7 +23,7 @@ class MeshCsvWriter {
     val writer = CSVWriter.open(new File(file), append = exists)
 
     // headers
-    if (!exists) writer.writeRow(List("mesh_name", "quadrat_size_m", "quadrat_rel_x", "quadrat_rel_y", "quadrat_abs_x", "quadrat_abs_y", "quadrat_abs_z", "num_faces", "3d_surface_area", "2d_surface_area", "surface_rugosity"))
+    if (!exists) writer.writeRow(List("mesh_name", "quadrat_size_m", "quadrat_rel_x", "quadrat_rel_y", "quadrat_rel_z_avg", "quadrat_rel_z_stddev", "quadrat_abs_x", "quadrat_abs_y", "quadrat_abs_z", "num_faces", "num_vertices", "3d_surface_area", "2d_surface_area", "surface_rugosity"))
 
     val areasArray = areas.flatten.toArray.flatten
 
@@ -37,9 +37,10 @@ class MeshCsvWriter {
           val area3d = areasArray(areaIndex)._1
           val area2d = areasArray(areaIndex)._2
           val faces = areasArray(areaIndex)._3
+          val vertices = areasArray(areaIndex)._4
           val rugosity = area3d / area2d
           if (area3d > 0 && area2d > 0) {
-            writer.writeRow(List(name, sizes(sizeIndex), q.id._1, q.id._2, q.midpoint.x, q.midpoint.y, q.midpoint.z, faces, area3d, area2d, rugosity))
+            writer.writeRow(List(name, sizes(sizeIndex), q.id._1, q.id._2, q.relativeZAvg, q.relativeZStd, q.midpoint.x, q.midpoint.y, q.midpoint.z, faces, vertices, area3d, area2d, rugosity))
           }
           areaIndex = areaIndex + 1
         })

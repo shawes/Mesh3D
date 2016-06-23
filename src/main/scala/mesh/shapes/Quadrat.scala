@@ -10,8 +10,10 @@ class Quadrat(val id: (Int, Int), val size: Double, val midpoint: Vertex) extend
   new Vertex(midpoint.x + size / 2, midpoint.y - size / 2, midpoint.z),
   new Vertex(midpoint.x + size / 2, midpoint.y + size / 2, midpoint.z)) {
 
-  override def contains(vertex: Vertex): Boolean = (vertex.x > a.x && vertex.x < d.x) && (vertex.y > a.y && vertex.y < b.y)
+  var relativeZAvg = 0.0
+  var relativeZStd = 0.0
 
+  override def contains(vertex: Vertex): Boolean = (vertex.x > a.x && vertex.x < d.x) && (vertex.y > a.y && vertex.y < b.y)
 
   override def equals(that: Any): Boolean = that match {
     case that: Quadrat => that.midpoint.equals(this.midpoint) && (that.id._1 == this.id._1 && that.id._2 == this.id._2) && that.size == this.size
