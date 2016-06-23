@@ -23,7 +23,7 @@ class MeshCsvWriter {
     val writer = CSVWriter.open(new File(file), append = exists)
 
     // headers
-    if (!exists) writer.writeRow(List("mesh_name", "quadrat_size_m", "quadrat_coord_x", "quadrat_coord_y", "quadrat_centroid_x", "quadrat_centroid_y", "quadrat_centroid_z", "faces", "3d_area", "2d_area", "rugosity"))
+    if (!exists) writer.writeRow(List("mesh_name", "quadrat_size_m", "quadrat_rel_x", "quadrat_rel_y", "quadrat_abs_x", "quadrat_abs_y", "quadrat_abs_z", "num_faces", "3d_surface_area", "2d_surface_area", "surface_rugosity"))
 
     val areasArray = areas.flatten.toArray.flatten
 
