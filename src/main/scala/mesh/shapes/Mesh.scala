@@ -40,8 +40,10 @@ class Mesh(val vertices: List[Vertex], val faces: List[Face]) {
     }
 
     val valuesOfZ = vertices.map(v => v.z)
+    if (valuesOfZ.nonEmpty) {
     quadrat.relativeZAvg = arithmeticMean(valuesOfZ: _*)
     quadrat.relativeZStd = populationStandardDeviation(valuesOfZ: _*)
+    }
 
     (area3d, area2d, facesCount, vertices.distinct.size)
   }
