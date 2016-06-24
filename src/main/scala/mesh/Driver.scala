@@ -21,6 +21,9 @@ object Driver {
     opt[Unit]("verbose").action((_, c) =>
       c.copy(verbose = true)).text("verbose is a flag")
 
+    opt[Unit]("append").action((_, c) =>
+      c.copy(verbose = false)).text("append is a flag")
+
     opt[String]('o', "out").required().action((x, c) =>
       c.copy(out = x)).text("output file to which to write (it has to be a .csv file)")
 
@@ -72,7 +75,7 @@ object Driver {
     if (config.verbose) println("Finished calculating the 2D and 3D areas of the quadrats")
 
     val writer = new MeshCsvWriter()
-    writer.write(config.out, files.toList, quadrats, config.size.toList, areas)
+    writer.write(config.out, files.toList, quadrats, config.size.toList, areas, config.append)
     if (config.verbose) println("Finished writing to " + config.out)
   }
 

@@ -13,17 +13,18 @@ class MeshCsvWriter {
             files: List[File],
             quadrats: Seq[List[Quadrat]],
             sizeOfQuadrat: List[Double],
-            areas: ParSeq[Seq[List[(Double, Double, Int, Int)]]]): Unit = {
+            areas: ParSeq[Seq[List[(Double, Double, Int, Int)]]],
+            append: Boolean): Unit = {
 
     // strip the file extension off the mesh names
     val names = files.map(x => x.getName.split('.')(0))
 
     val csvFile = new File(file)
-    val exists: Boolean = csvFile.isFile
-    val writer = CSVWriter.open(new File(file), append = exists)
+    val appendFile = append && csvFile.isFile
+    val writer = CSVWriter.open(new File(file), append = appendFile)
 
     // headers
-    if (!exists) writer.writeRow(List("mesh_name", "quadrat_size_m", "quadrat_rel_x", "quadrat_rel_y", "quadrat_rel_z_avg", "quadrat_rel_z_stddev", "quadrat_abs_x", "quadrat_abs_y", "quadrat_abs_z", "num_faces", "num_vertices", "3d_surface_area", "2d_surface_area", "surface_rugosity"))
+    if (!appendFile) writer.writeRow(List("mesh_name", "quadrat_size_m", "quadrat_rel_x", "quadrat_rel_y", "quadrat_rel_z_avg", "quadrat_rel_z_stddev", "quadrat_abs_x", "quadrat_abs_y", "quadrat_abs_z", "num_faces", "num_vertices", "3d_surface_area", "2d_surface_area", "surface_rugosity"))
 
     val areasArray = areas.flatten.toArray.flatten
 
