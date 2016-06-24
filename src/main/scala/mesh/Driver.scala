@@ -41,15 +41,15 @@ object Driver {
   }
 
   def runMesh3D(config: Config): Unit = {
-    val reader = new MeshReader()
+    val reader = new MeshReader(config.verbose, new DimensionOrder(config.dim))
     val geometry = new Geometry()
     val files = config.files.par
 
-    val passes = files.map(x => reader.readPull(x))
+    val meshes = files.map(x => reader.read(x))
     if (config.verbose) println("Finished reading in the mesh files")
 
-    val meshes = passes.map(x => new Mesh(x, new DimensionOrder(config.dim), config.verbose))
-    if (config.verbose) println("Finished constructing the vertices and faces")
+    //val meshes = passes.map(x => new Mesh(x))
+    //if (config.verbose) println("Finished constructing the vertices and faces")
 
     val boundingBox = geometry.findMaximumBoundingBox(meshes)
     if (config.verbose) {

@@ -16,7 +16,8 @@ libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-reflect" % "2.11.8",
   "com.github.tototoshi" %% "scala-csv" % "1.3.2",
   "com.github.scopt" %% "scopt" % "3.5.0",
-  "org.clapper" %% "grizzled-scala" % "2.3.1"
+  "org.clapper" %% "grizzled-scala" % "2.3.1",
+  "org.apache.commons" % "commons-io" % "1.3.2"
 )
 
 
