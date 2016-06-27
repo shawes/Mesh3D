@@ -1,5 +1,11 @@
 package mesh.shapes
 
+/** Represents a vertex in the mesh
+  *
+  * @param x x coordinate
+  * @param y y coordinate
+  * @param z z coordinate
+  */
 class Vertex(val x: Double, val y:Double, val z:Double) {
 
   def distanceToXYZ(toVertex: Vertex): Double =

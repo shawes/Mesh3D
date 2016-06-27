@@ -3,6 +3,13 @@ package mesh.shapes
 import scala.Double._
 import scala.math._
 
+/**
+  *
+  * @param a
+  * @param b
+  * @param c
+  * @param d
+  */
 class Quadrilateral(val a: Vertex, val b: Vertex, val c: Vertex, val d: Vertex) {
 
   val vertices = List(a, b, c, d)

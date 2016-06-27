@@ -11,21 +11,17 @@ class Face(val v1: Vertex, val v2: Vertex, val v3: Vertex) {
     getArea(edge1, edge2, edge3)
   }
 
-  private def getArea(edge1: Double, edge2: Double, edge3: Double): Double = {
-    val semiperimeter: Double = (edge1 + edge2 + edge3) * 0.5
-    val result = math.sqrt(semiperimeter * (semiperimeter - edge1) * (semiperimeter - edge2) * (semiperimeter - edge3))
-    if (result == Double.NaN) {
-      println("NaN encountered with edges :" + edge1 + ", " + edge2 + ", " + edge3)
-    }
-    result
-
-  }
-
   def area2D: Double = {
     val edge1 = v1.distanceToXY(v2)
     val edge2 = v2.distanceToXY(v3)
     val edge3 = v3.distanceToXY(v1)
     getArea(edge1, edge2, edge3)
+  }
+
+  private def getArea(edge1: Double, edge2: Double, edge3: Double): Double = {
+    val semiperimeter: Double = (edge1 + edge2 + edge3) * 0.5
+    val result = math.sqrt(semiperimeter * (semiperimeter - edge1) * (semiperimeter - edge2) * (semiperimeter - edge3))
+    result
   }
 
   override def toString = "centroid is " + centroid

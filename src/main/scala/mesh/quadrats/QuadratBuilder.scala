@@ -19,14 +19,8 @@ class QuadratBuilder {
 
     val centroid = box.centroid
     val quadrats = new ListBuffer[Quadrat]()
-    //quadrats += new Quadrat((0, 0), size, centroid)
-
-    //println("centroid is " + centroid)
-
     val distanceToEdgeAD = centroid.distanceToXYZ(new Line(box.d, box.a).midpoint)
     val distanceToEdgeCD = centroid.distanceToXYZ(new Line(box.c, box.d).midpoint)
-
-    //println("dist right=" + distanceToEdgeAD + ", dist down =" + distanceToEdgeCD)
 
     for (i <- 0 until (distanceToEdgeCD / size).toInt + 1) {
       for (j <- 0 until (distanceToEdgeAD / size).toInt + 1) {
