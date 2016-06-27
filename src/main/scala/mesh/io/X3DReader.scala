@@ -11,7 +11,8 @@ import scala.xml.{Node, XML}
 
 /**
   *
-  * Created by Steven Hawes on 24/06/16.
+  * @param verbose
+  * @param order
   */
 class X3DReader(verbose: Boolean, order: DimensionOrder) extends MeshFileTypeReader {
 

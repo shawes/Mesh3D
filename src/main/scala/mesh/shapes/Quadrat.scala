@@ -2,7 +2,9 @@ package mesh.shapes
 
 /**
   *
-  * Created by Steven Hawes on 7/06/16.
+  * @param id
+  * @param size
+  * @param midpoint
   */
 class Quadrat(val id: (Int, Int), val size: Double, val midpoint: Vertex) extends Quadrilateral(
   new Vertex(midpoint.x - size / 2, midpoint.y - size / 2, midpoint.z),

@@ -5,6 +5,11 @@ import java.io.File
 import mesh.shapes.{DimensionOrder, Mesh}
 import org.apache.commons.io.FilenameUtils
 
+/**
+  *
+  * @param verbose
+  * @param order
+  */
 class MeshReader(verbose: Boolean, order: DimensionOrder) {
 
   def read(file: File): Mesh = {

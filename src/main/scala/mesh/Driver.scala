@@ -6,10 +6,12 @@ import java.util.Calendar
 import mesh.io.{MeshCsvWriter, MeshReader}
 import mesh.quadrats.QuadratBuilder
 import mesh.shapes._
+import scopt.OptionParser
 
 object Driver {
 
-  val parser = new scopt.OptionParser[Config]("mesh_quadrats") {
+
+  val parser = new OptionParser[Config]("mesh_quadrats") {
     head("mesh_quadrats", "1.0")
 
     opt[String]('d', "dim").optional().action((x, c) =>
@@ -31,7 +33,6 @@ object Driver {
       c.copy(files = c.files :+ x)).text("input .x3d files to calcuate quadrats for")
   }
 
-
   def main(args: Array[String]) {
     parser.parse(args, Config()) match {
       case Some(config) =>
@@ -45,16 +46,14 @@ object Driver {
 
   def runMesh3D(config: Config): Unit = {
     val reader = new MeshReader(config.verbose, new DimensionOrder(config.dim))
-    val geometry = new Geometry()
     val files = config.files.par
 
+    // Read in each mesh, creating a list of vertices and faces
     val meshes = files.map(x => reader.read(x))
     if (config.verbose) println("Finished reading in the mesh files")
 
-    //val meshes = passes.map(x => new Mesh(x))
-    //if (config.verbose) println("Finished constructing the vertices and faces")
-
-    val boundingBox = geometry.findMaximumBoundingBox(meshes)
+    // Calculate the minimum bounding box that covers all the meshes
+    val boundingBox = new BoundingBox(meshes)
     if (config.verbose) {
       println("Finished constructing the bounding box:")
       println("A: " + boundingBox.a)
@@ -63,6 +62,7 @@ object Driver {
       println("D: " + boundingBox.d)
     }
 
+    // Generate virtual qudrats using the centroid of the bounding box
     val quadratBuilder = new QuadratBuilder()
     val quadrats = config.size.map(size => quadratBuilder.build(boundingBox, size))
     if (config.verbose) {
@@ -71,9 +71,11 @@ object Driver {
       print(" respectively.\n")
     }
 
+    // Calculate the 3d & 2D areas of the quadrats, also returns the number of faces and vertices
     val areas = meshes.map(x => x.getArea(quadrats))
     if (config.verbose) println("Finished calculating the 2D and 3D areas of the quadrats")
 
+    // Write the output to a CSV file
     val writer = new MeshCsvWriter()
     writer.write(config.out, files.toList, quadrats, config.size.toList, areas, config.append)
     if (config.verbose) println("Finished writing to " + config.out)
