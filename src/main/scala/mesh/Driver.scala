@@ -30,7 +30,7 @@ object Driver {
       c.copy(out = x)).text("output file to which to write (it has to be a .csv file)")
 
     arg[File]("<file>...").unbounded().required().action((x, c) =>
-      c.copy(files = c.files :+ x)).text("input .x3d files to calcuate quadrats for")
+      c.copy(files = c.files :+ x)).text("input mesh files (.x3d or .obj)")
   }
 
   def main(args: Array[String]) {
