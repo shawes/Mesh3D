@@ -29,9 +29,9 @@ Usage: java -Xmx4096m -jar mesh_quadrats [options] <file>...
 
 ## What does it do?
 The general gist of the algorithm are:  
-1. Read in a list of X3D or OBJ mesh files
+1. Read in a list of X3D or OBJ mesh files  
 2. Find the maximum bounding rectangle that fits inside all the meshes.  
-3. Subdivide the each mesh into the specified number of quadrats
+3. Subdivide the each mesh into the specified number of quadrats  
 4. Calculate the area face where the centroid fits into of each quadrat, using the dimensions specified.  
 5. Prints the output to a .csv file.  
 
@@ -39,5 +39,5 @@ The general gist of the algorithm are:
 The output CSV file contains information on the maximum inside bounding box of the given aligned meshes and
 also the dimensions of the quadrats using the given ratio.  
   
-It also contains both the 3D and the 2D areas of the faces found in each quadrat in order to calculate rugosity.
+It also contains both the 3D and the 2D areas of the faces found in each quadrat in order to calculate surface rugosity.
 
