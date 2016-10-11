@@ -1,12 +1,12 @@
 name := "mesh3d.quadrats"
 
-version := "1.0"
+version := "2.1"
 
 description := """a command line tool for calculating areas of faces in a 3D mesh using quadrats"""
 
 scalaVersion := "2.11.8"
 
-assemblyJarName in assembly := "meshquadrats.jar"
+assemblyJarName in assembly := "mesh3d.jar"
 
 resolvers += Resolver.sonatypeRepo("public")
 
