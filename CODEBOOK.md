@@ -8,9 +8,8 @@
 | quadrat_size_m | The size of the fitted quadrats | In the base unit of the mesh |
 | quadrat_rel_x | The relative x coordinates of the quadrat |
 | quadrat_rel_y | The relative y coordinates of the quadrat |
-| quadrat_rel_z_avg | The average of the relative z coordinates of the quadrat |
+| quadrat_rel_z_avg | The average of the relative z coordinates of the quadrat |Not implemented yet |
 | quadrat_rel_z_stddev | The standard deviation of the relative z coordinates of the quadrat | Not implemented yet |
-| quadrat_rel_z_avg | The average of the relative z coordinates of the quadrat | Not implemented yet |
 | quadrat_abs_x | The absolute x coordinates of the quadrat |
 | quadrat_abs_y | The absolute x coordinates of the quadrat |
 | quadrat_abs_z | The absolute x coordinates of the quadrat |
