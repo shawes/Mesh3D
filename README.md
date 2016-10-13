@@ -1,4 +1,4 @@
-# Mesh 3D Qudrats
+# Mesh 3D Quadrats
 
 Mesh 3D quadrat is a command line tool that splits up rectangular 3D meshes into a number of specified qaudrats and calculates the area of each quadrat.
 
