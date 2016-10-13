@@ -1,11 +1,11 @@
-# Mesh Quadrats
+# Mesh 3D Qudrats
 
-Mesh quadrat is a command line tool that splits up rectangular 3D meshes into a number of specified qaudrats and calculates the area of each quadrat.
+Mesh 3D quadrat is a command line tool that splits up rectangular 3D meshes into a number of specified qaudrats and calculates the area of each quadrat.
 
 
 ## Version
 
-The current version is 2.0
+The current version is 2.1
 
 ## Usage
 
@@ -15,8 +15,8 @@ you can install it here: http://www.oracle.com/technetwork/java/javase/downloads
 The command line usage for this application is specified as:
 
 ```
-mesh_quadrats 1.0
-Usage: java -Xmx4096m -jar mesh_quadrats [options] <file>...
+mesh3d 2.1
+Usage: java -Xmx4096m -jar mesh3d.jar [options] <file>...
 
   -d, --dim <value>   the dimensions of the input files WLH (width-length-height)
   -s, --size <value>  the size of a quadrat (standard is metres, but depends on the mesh units)
